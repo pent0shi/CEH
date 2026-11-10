@@ -1,0 +1,4710 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>CEH_v13_Module_18_IoT_and_OT_Hacking</title>
+<style>
+@page {
+  size: A4;
+  margin: 18mm;
+  @bottom-left {
+    content: "CEH v13 Module 18: IoT and OT Hacking";
+    font-family: "DejaVu Sans";
+    font-size: 8pt;
+    color: #536273;
+  }
+  @bottom-right {
+    content: "Page " counter(page) " of " counter(pages);
+    font-family: "DejaVu Sans";
+    font-size: 8pt;
+    color: #536273;
+  }
+}
+@page title {
+  @bottom-left { content: none; }
+  @bottom-right { content: none; }
+}
+html { font-family: "DejaVu Sans"; font-size: 11pt; line-height: 1.5; }
+body { color: #1d2733; background: white; }
+h1, h2, h3 { color: #123c63; line-height: 1.25; break-after: avoid; }
+h1 { font-size: 24pt; margin: 0 0 8mm; }
+h2 { font-size: 17pt; border-bottom: 2px solid #2c6e9e;
+  padding-bottom: 2mm; margin-top: 8mm; }
+h3 { font-size: 13pt; margin-top: 6mm; }
+p, ul, ol { margin: 2mm 0 3mm; orphans: 3; widows: 3; }
+li { margin-bottom: 1mm; }
+a { color: #185b8c; text-decoration: none; }
+pre {
+  font-family: "DejaVu Sans Mono";
+  font-size: 8.5pt;
+  line-height: 1.35;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  background: #f3f5f7;
+  border: 0.4pt solid #b9c3cc;
+  border-radius: 3px;
+  padding: 3mm;
+  margin: 3mm 0;
+  break-inside: avoid;
+}
+code { font-family: "DejaVu Sans Mono"; font-size: 8.5pt;
+  overflow-wrap: anywhere; background: #f3f5f7; }
+pre code { background: transparent; padding: 0; }
+table { width: 100%; table-layout: fixed; border-collapse: collapse;
+  font-size: 9.5pt; margin: 3mm 0 4mm; }
+thead { display: table-header-group; }
+tr { break-inside: avoid; }
+th { background: #e4edf4; color: #123c63; font-weight: bold; }
+th, td { border: 0.4pt solid #9eabb7; padding: 1.6mm;
+  vertical-align: top; overflow-wrap: anywhere; }
+blockquote { margin: 3mm 0; padding: 2.5mm 3mm; background: #eef5fa;
+  border-left: 3pt solid #2878aa; break-inside: avoid; }
+blockquote:has(strong) { border-left-color: #2878aa; }
+blockquote p { margin: 0; }
+.title-page { page: title; height: 245mm; display: flex;
+  flex-direction: column; justify-content: center; text-align: center; }
+.title-page .course { color: #2878aa; font-size: 15pt; font-weight: bold; }
+.title-page .module { color: #123c63; font-size: 30pt; line-height: 1.2;
+  font-weight: bold; margin: 8mm 0; }
+.title-page .subtitle { color: #536273; font-size: 13pt; }
+.title-page .meta { margin-top: 20mm; color: #536273; font-size: 10pt; }
+.toc { break-after: page; }
+.toc h1 { font-size: 22pt; }
+.toc ul { list-style: none; padding-left: 0; }
+.toc ul ul { padding-left: 5mm; }
+.toc li { margin: 1mm 0; }
+.toc a::after { content: leader('.') target-counter(attr(href), page);
+  color: #536273; }
+.content > h1 { display: none; }
+.content > h2 { break-before: auto; }
+</style></head><body>
+<section class="title-page">
+  <div class="course">CEH v13 AI | Exam 312-50</div>
+  <div class="module">Module 18<br>IoT and OT Hacking</div>
+  <div class="subtitle">Complete Exam-Focused Study Guide</div>
+  <div class="meta">Based on 39 supplied note pages<br>
+  Includes commands, tools, practice questions, and flashcards</div>
+</section>
+
+<section class="toc"><h1>Table of Contents</h1><div class="toc">
+<ul>
+<li><a href="#1-module-at-a-glance">1. Module at a Glance</a></li>
+<li><a href="#2-big-picture-map">2. Big Picture Map</a></li>
+<li><a href="#3-topic-by-topic-guide">3. Topic-by-Topic Guide</a><ul>
+<li><a href="#31-learning-objectives-iot-meaning-and-data-flow">3.1 Learning objectives, IoT meaning, and data flow</a></li>
+<li><a href="#32-iot-architecture-technologies-operating-systems-and-protocols">3.2 IoT architecture, technologies, operating systems, and protocols</a></li>
+<li><a href="#33-owasp-iot-top-10-attack-surfaces-and-device-vulnerabilities">3.3 OWASP IoT Top 10, attack surfaces, and device vulnerabilities</a></li>
+<li><a href="#34-iot-threat-catalogue-ddos-botnets-and-hvac-pivoting">3.4 IoT threat catalogue, DDoS botnets, and HVAC pivoting</a></li>
+<li><a href="#35-rolling-code-and-jamming-attacks">3.5 Rolling-code and jamming attacks</a></li>
+<li><a href="#36-backdoors-telnet-blueborne-and-smart-grid-compromise">3.6 Backdoors, Telnet, BlueBorne, and smart-grid compromise</a></li>
+<li><a href="#37-sdr-attacks-local-discovery-and-dns-rebinding">3.7 SDR attacks, local discovery, and DNS rebinding</a></li>
+<li><a href="#38-fault-injection-and-the-remaining-iot-attack-types">3.8 Fault injection and the remaining IoT attack types</a></li>
+<li><a href="#39-iot-malware-and-botnet-families">3.9 IoT malware and botnet families</a></li>
+<li><a href="#310-information-gathering-with-shodan-and-wireless-sniffing">3.10 Information gathering with Shodan and wireless sniffing</a></li>
+<li><a href="#311-iot-vulnerability-scanning-and-validation">3.11 IoT vulnerability scanning and validation</a></li>
+<li><a href="#312-rfcrack-open-sniffer-and-hackrf-one">3.12 RFCrack, Open Sniffer, and HackRF One</a></li>
+<li><a href="#313-hackrf-replay-and-hardware-communication-buses">3.13 HackRF replay and hardware communication buses</a></li>
+<li><a href="#314-nand-glitching-camover-and-telnet-access">3.14 NAND glitching, CamOver, and Telnet access</a></li>
+<li><a href="#315-maintaining-access-through-firmware-modification">3.15 Maintaining access through firmware modification</a></li>
+<li><a href="#316-firmware-analysis-and-reverse-engineering">3.16 Firmware analysis and reverse engineering</a></li>
+<li><a href="#317-general-iot-hacking-and-device-management-tools">3.17 General IoT hacking and device-management tools</a></li>
+<li><a href="#318-iot-countermeasures-manufacturer-guidance-and-hardware-practice">3.18 IoT countermeasures, manufacturer guidance, and hardware practice</a></li>
+<li><a href="#319-ot-ics-components-and-itot-convergence">3.19 OT, ICS components, and IT/OT convergence</a></li>
+<li><a href="#320-purdue-model-and-ot-protocol-placement">3.20 Purdue model and OT protocol placement</a></li>
+<li><a href="#321-ot-challenges-and-vulnerabilities">3.21 OT challenges and vulnerabilities</a></li>
+<li><a href="#322-mitre-attck-for-ics">3.22 MITRE ATT&amp;CK for ICS</a></li>
+<li><a href="#323-ot-threats-hmi-attacks-and-side-channels">3.23 OT threats, HMI attacks, and side channels</a></li>
+<li><a href="#324-plc-rootkits-evil-plc-rf-controllers-and-supply-chains">3.24 PLC rootkits, Evil PLC, RF controllers, and supply chains</a></li>
+<li><a href="#325-ot-malware-fuxnet-and-related-families">3.25 OT malware: Fuxnet and related families</a></li>
+<li><a href="#326-ot-information-gathering-with-shodan-and-cirtnet">3.26 OT information gathering with Shodan and CIRT.net</a></li>
+<li><a href="#327-ot-protocol-discovery-with-nmap-wireshark-and-malcolm">3.27 OT protocol discovery with Nmap, Wireshark, and Malcolm</a></li>
+<li><a href="#328-nessus-fuzzowski-and-skybox">3.28 Nessus, Fuzzowski, and Skybox</a></li>
+<li><a href="#329-ics-hardware-analysis-metasploit-modbus-cli-and-dnp3">3.29 ICS hardware analysis, Metasploit, modbus-cli, and DNP3</a></li>
+<li><a href="#330-ot-defenses-purdue-controls-zero-trust-and-organizations">3.30 OT defenses, Purdue controls, zero trust, and organizations</a></li>
+</ul>
+</li>
+<li><a href="#4-tool-encyclopedia">4. Tool Encyclopedia</a><ul>
+<li><a href="#41-exposure-search-and-information-gathering">4.1 Exposure search and information gathering</a></li>
+<li><a href="#42-discovery-scanning-analysis-and-prioritization">4.2 Discovery, scanning, analysis, and prioritization</a></li>
+<li><a href="#43-radio-hardware-and-exploitation-tools">4.3 Radio, hardware, and exploitation tools</a></li>
+<li><a href="#44-firmware-and-reverse-engineering-tools">4.4 Firmware and reverse-engineering tools</a></li>
+<li><a href="#45-device-management-and-security-products">4.5 Device management and security products</a></li>
+</ul>
+</li>
+<li><a href="#5-command-sheet">5. Command Sheet</a><ul>
+<li><a href="#51-shodan-filters-and-http-discovery-with-nmap">5.1 Shodan filters and HTTP discovery with Nmap</a></li>
+<li><a href="#52-ifconfig-airmon-ng-airodump-ng-and-wireshark">5.2 ifconfig, Airmon-ng, Airodump-ng, and Wireshark</a></li>
+<li><a href="#53-iotseeker">5.3 IoTSeeker</a></li>
+<li><a href="#54-rfcrack">5.4 RFCrack</a></li>
+<li><a href="#55-hackrf-transfer-and-device-information">5.5 HackRF transfer and device information</a></li>
+<li><a href="#56-bus-auditor-uart-and-i2c-scans">5.6 BUS Auditor UART and I2C scans</a></li>
+<li><a href="#57-camover">5.7 CamOver</a></li>
+<li><a href="#58-firmware-mod-kit-extraction">5.8 Firmware Mod Kit extraction</a></li>
+<li><a href="#59-static-firmware-commands-and-qemu-emulation">5.9 Static firmware commands and QEMU emulation</a></li>
+<li><a href="#510-nmap-industrial-protocol-scripts">5.10 Nmap industrial-protocol scripts</a></li>
+<li><a href="#511-fuzzowski-protocol-fuzzing">5.11 Fuzzowski protocol fuzzing</a></li>
+<li><a href="#512-metasploit-modbus-auxiliary-modules">5.12 Metasploit Modbus auxiliary modules</a></li>
+<li><a href="#513-modbus-cli">5.13 modbus-cli</a></li>
+<li><a href="#514-reading-the-fuxnet-console-evidence">5.14 Reading the Fuxnet console evidence</a></li>
+</ul>
+</li>
+<li><a href="#6-ports-protocols-standards-and-acronyms">6. Ports, Protocols, Standards and Acronyms</a><ul>
+<li><a href="#61-core-network-and-ot-ports">6.1 Core network and OT ports</a></li>
+<li><a href="#62-wireless-link-fieldbus-and-industrial-technologies">6.2 Wireless, link, fieldbus, and industrial technologies</a></li>
+<li><a href="#63-standards-and-architecture-terms">6.3 Standards and architecture terms</a></li>
+<li><a href="#64-quick-acronym-decoder">6.4 Quick acronym decoder</a></li>
+</ul>
+</li>
+<li><a href="#7-attack-vs-countermeasure-and-look-alike-comparisons">7. Attack vs Countermeasure and Look-alike Comparisons</a><ul>
+<li><a href="#71-attacks-and-best-matched-countermeasures">7.1 Attacks and best-matched countermeasures</a></li>
+<li><a href="#72-look-alike-pairs">7.2 Look-alike pairs</a></li>
+</ul>
+</li>
+<li><a href="#8-exam-cheat-sheet">8. Exam Cheat Sheet</a><ul>
+<li><a href="#81-keyword-answer">8.1 Keyword -&gt; answer</a></li>
+<li><a href="#82-must-memorize-lists-and-numbers">8.2 Must-memorize lists and numbers</a></li>
+<li><a href="#83-pick-the-best-option-rules">8.3 Pick the BEST option rules</a></li>
+</ul>
+</li>
+<li><a href="#9-practice-questions">9. Practice Questions</a><ul>
+<li><a href="#question-1-iot-architecture">Question 1: IoT architecture</a></li>
+<li><a href="#question-2-rolling-code-scenario">Question 2: Rolling-code scenario</a></li>
+<li><a href="#question-3-best-first-ot-step">Question 3: Best first OT step</a></li>
+<li><a href="#question-4-nmap-flag-reading">Question 4: Nmap flag reading</a></li>
+<li><a href="#question-5-ot-script-and-protocol">Question 5: OT script and protocol</a></li>
+<li><a href="#question-6-firmware-analysis">Question 6: Firmware analysis</a></li>
+<li><a href="#question-7-hardware-interface">Question 7: Hardware interface</a></li>
+<li><a href="#question-8-rfcrack-flag">Question 8: RFCrack flag</a></li>
+<li><a href="#question-9-purdue-placement">Question 9: Purdue placement</a></li>
+<li><a href="#question-10-mitre-attck-for-ics">Question 10: MITRE ATT&amp;CK for ICS</a></li>
+<li><a href="#question-11-evil-plc">Question 11: Evil PLC</a></li>
+<li><a href="#question-12-ai-assisted-assessment">Question 12: AI-assisted assessment</a></li>
+<li><a href="#question-13-modbus-command-reading">Question 13: Modbus command reading</a></li>
+<li><a href="#question-14-metasploit-module-selection">Question 14: Metasploit module selection</a></li>
+<li><a href="#question-15-hackrf-flags">Question 15: HackRF flags</a></li>
+<li><a href="#question-16-default-credential-scenario">Question 16: Default-credential scenario</a></li>
+<li><a href="#question-17-firmware-persistence">Question 17: Firmware persistence</a></li>
+<li><a href="#question-18-fuzzing-tool">Question 18: Fuzzing tool</a></li>
+<li><a href="#question-19-ot-malware-recognition">Question 19: OT malware recognition</a></li>
+<li><a href="#question-20-segmentation-scenario">Question 20: Segmentation scenario</a></li>
+<li><a href="#question-21-ai-attack-angle">Question 21: AI attack angle</a></li>
+<li><a href="#question-22-supply-chain-recognition">Question 22: Supply-chain recognition</a></li>
+<li><a href="#question-23-command-output-interpretation">Question 23: Command output interpretation</a></li>
+<li><a href="#question-24-best-vulnerability-scanning-decision">Question 24: Best vulnerability-scanning decision</a></li>
+</ul>
+</li>
+<li><a href="#10-flashcards">10. Flashcards</a></li>
+<li><a href="#11-glossary">11. Glossary</a></li>
+<li><a href="#12-coverage-report">12. Coverage Report</a><ul>
+<li><a href="#121-page-to-section-map">12.1 Page-to-section map</a></li>
+<li><a href="#122-unclear-items-and-best-readings">12.2 Unclear items and best readings</a></li>
+<li><a href="#123-items-to-double-check">12.3 Items to double check</a></li>
+<li><a href="#124-coverage-confirmation">12.4 Coverage confirmation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<main class="content"><h1 id="ceh-v13-module-18-iot-and-ot-hacking">CEH v13 Module 18: IoT and OT Hacking</h1>
+<p>Exam-focused study guide for CEH 312-50. Based on pages 1 to 39 of the
+supplied notes. Added material is marked ADDED CONTEXT.</p>
+<h2 id="1-module-at-a-glance">1. Module at a Glance</h2>
+<p><strong>Module 18: IoT and OT Hacking</strong></p>
+<ul>
+<li>IoT connects physical objects to IP networks so they can sense and share data.</li>
+<li>OT monitors or changes physical industrial processes through ICS equipment.</li>
+<li>IoT attacks target devices, radios, firmware, cloud services, and default credentials.</li>
+<li>OT attacks target PLCs, HMIs, SCADA, industrial protocols, and trusted suppliers.</li>
+<li>Defense combines asset visibility, segmentation, secure updates, and safe monitoring.</li>
+</ul>
+<p><strong>Why it matters:</strong> A compromised camera can become a botnet member. A compromised
+PLC can stop production or damage equipment. Confidentiality matters, but OT also
+depends heavily on availability, integrity, safety, and deterministic timing.</p>
+<p><strong>What the exam usually asks:</strong> Purdue levels, ICS component roles, protocol-to-port
+matches, Modbus weakness, Nmap OT scripts, Shodan filters, SDR and firmware tools,
+rolling-code steps, OWASP IoT items, MITRE ATT&amp;CK for ICS tactics, and the safest
+countermeasure for a live plant.</p>
+<p><strong>Ten things to remember most:</strong></p>
+<ol>
+<li>Edge -&gt; access gateway -&gt; internet -&gt; middleware -&gt; application is the IoT stack.</li>
+<li>Purdue Level 0 is the physical process; Level 3 is site operations; Level 3.5 is
+   the industrial DMZ; Levels 4 and 5 are enterprise systems.</li>
+<li>PLC executes control logic; RTU collects remote field data; HMI displays and
+   accepts operator commands; SCADA supervises; DCS controls a distributed plant.</li>
+<li>Modbus TCP uses port 502 and normally has no authentication or encryption.</li>
+<li>DNP3 uses 20000; EtherNet/IP uses 44818; S7 uses 102; BACnet uses UDP 47808.</li>
+<li>A rolling-code attack jams reception, captures codes, forwards one, and saves
+   another unused valid code for later.</li>
+<li>Shodan finds exposed devices; Nmap identifies services; Nessus finds known
+   vulnerabilities; Malcolm analyzes network traffic.</li>
+<li>UART, SPI, I2C, and JTAG are hardware interfaces. JTAG is a debug/test interface.</li>
+<li>Active scanning can crash fragile OT devices. Prefer passive discovery first.</li>
+<li>Zero trust means verify explicitly and grant least privilege, even inside OT.</li>
+</ol>
+<h2 id="2-big-picture-map">2. Big Picture Map</h2>
+<pre><code class="language-text">                 IoT path
+ Sensors -&gt; Edge -&gt; Gateway -&gt; Internet -&gt; Middleware -&gt; App
+    |          |         |                    |
+ hardware    radio    exposure              APIs/data
+    |          |         |                    |
+ JTAG/UART  replay   Shodan/Telnet       cloud privacy
+
+                 OT path
+ Enterprise L5/L4 -&gt; IDMZ L3.5 -&gt; Operations L3
+                                      |
+                              Supervisory L2
+                                      |
+                              Control L1 -&gt; Process L0
+
+ Assessment: passive discovery -&gt; safe validation -&gt; report
+ Defense: inventory -&gt; segment -&gt; harden -&gt; monitor -&gt; recover
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Main target</th>
+<th>Typical evidence</th>
+<th>Best first defense</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IoT</td>
+<td>Device and ecosystem</td>
+<td>Banner, firmware, radio</td>
+<td>Unique credentials and updates</td>
+</tr>
+<tr>
+<td>OT</td>
+<td>Physical process</td>
+<td>Passive traffic, asset data</td>
+<td>Zones, conduits, safe monitoring</td>
+</tr>
+<tr>
+<td>Both</td>
+<td>Availability and trust</td>
+<td>Logs and configuration</td>
+<td>Least privilege and recovery</td>
+</tr>
+</tbody>
+</table>
+<h2 id="3-topic-by-topic-guide">3. Topic-by-Topic Guide</h2>
+<h3 id="31-learning-objectives-iot-meaning-and-data-flow">3.1 Learning objectives, IoT meaning, and data flow</h3>
+<p><strong>What it is:</strong> The Internet of Things (IoT), also called the Internet of Everything
+(IoE) in the notes, is a network of IP-addressable objects with embedded sensors,
+processors, and communication hardware. A "thing" can be natural, human-made, or
+machine-made. The module objectives are IoT concepts, attacks, methodology and
+defense, followed by the same four areas for OT.</p>
+<p><strong>Analogy:</strong> A smart thermometer is a receptionist who reports room temperature to
+a head office and accepts instructions back.</p>
+<p><strong>How it works:</strong></p>
+<ol>
+<li>Industrial, wearable, healthcare, and home devices sense or collect data.</li>
+<li>They send data, often through an IoT gateway, across the internet.</li>
+<li>Cloud storage or servers store and analyze the data.</li>
+<li>A mobile app displays results and can send a remote-control command.</li>
+<li>The gateway returns the command to the device, which changes its behavior.</li>
+</ol>
+<p><strong>Real-world use:</strong> A factory motor reports vibration. Analytics detects an unusual
+pattern, and an authorized maintenance application schedules inspection. If default
+credentials protect the gateway, an outsider could instead read or alter the data.</p>
+<p><strong>Tools and commands used here:</strong> No tool is needed to define the flow. Later pages
+use Shodan, Nmap, Wireshark, firmware tools, and radio tools against its weak points.</p>
+<p><strong>AI angle (ADDED CONTEXT):</strong> AI can classify sensor anomalies and summarize asset
+inventory. An attacker can use AI to prioritize exposed devices from public banners.
+Example defensive prompt: "Group these authorized asset records by protocol, owner,
+patch status, and internet exposure. Do not suggest active tests."</p>
+<p><strong>Countermeasures and defense:</strong> Know every data producer and consumer. Authenticate
+devices and users, encrypt transport, restrict commands, and log administrative changes.</p>
+<blockquote>
+<p><strong>EXAM FOCUS:</strong> IoT is not only smart homes. The key property is embedded sensing
+or control plus network communication. A gateway translates or connects devices;
+it is not the same as cloud middleware. Trap: assuming every device directly uses
+a full TCP/IP stack and talks directly to an app.</p>
+</blockquote>
+<p><strong>Memory trick:</strong> "Sense, Send, Store, Study, Steer" describes sense, transmit,
+store, analyze, and command.</p>
+<h3 id="32-iot-architecture-technologies-operating-systems-and-protocols">3.2 IoT architecture, technologies, operating systems, and protocols</h3>
+<p><strong>What it is:</strong> The five layers separate physical sensing from user applications.</p>
+<p><strong>Analogy:</strong> A parcel moves from a local shop, through a regional depot and roads,
+to a sorting warehouse, and finally to the customer.</p>
+<p><strong>How it works:</strong></p>
+<ol>
+<li><strong>Edge technology:</strong> sensors, devices, machines, and intelligent edge nodes.</li>
+<li><strong>Access gateway:</strong> protocol translation and messaging between local and IP networks.</li>
+<li><strong>Internet:</strong> connectivity between endpoints and remote services.</li>
+<li><strong>Middleware:</strong> device management and information management.</li>
+<li><strong>Application:</strong> delivers applications to different IoT users.</li>
+</ol>
+<p><strong>Technology groups from the notes:</strong></p>
+<ul>
+<li>Short range: BLE, Li-Fi, NFC, QR codes and barcodes, RFID, Thread, Wi-Fi,
+  Wi-Fi Direct, Z-Wave, Zigbee, and ANT.</li>
+<li>Medium range: HaLow and LTE-Advanced.</li>
+<li>Long range: LPWAN, LoRaWAN, 6LoWPAN, Sigfox, Neul, VSAT, cellular, and NB-IoT.</li>
+<li>Wired: Ethernet, MoCA, and power-line communication (PLC), which is unrelated
+  to a programmable logic controller with the same abbreviation.</li>
+<li>Operating systems: Windows 10 IoT, Amazon FreeRTOS, Fuchsia, RIOT, Ubuntu Core,
+  ARM Mbed OS, Zephyr, Embedded Linux, NuttX RTOS, Integrity RTOS, and Tizen.</li>
+<li>Application protocols: CoAP, Edge, LWM2M, Physical Web, XMPP, Mihini/M3DA, and MQTT.</li>
+</ul>
+<p><strong>Real-world use:</strong> A battery soil sensor can use Zigbee to a gateway. The gateway
+uses IP networking to reach middleware, where MQTT messages become application data.</p>
+<p><strong>Tools and commands used here:</strong> Wireshark can decode MQTT and Zigbee. Open Sniffer,
+CatSniffer, and KillerBee examine low-power wireless traffic.</p>
+<blockquote>
+<p><strong>ADDED CONTEXT:</strong> MQTT is lightweight publish/subscribe messaging through a
+broker. CoAP is a REST-like protocol for constrained devices. LWM2M adds device
+management. XMPP is extensible XML messaging. 6LoWPAN adapts IPv6 to IEEE
+802.15.4 links; it is not simply a long-range radio like LoRaWAN.</p>
+</blockquote>
+<p><strong>AI angle (ADDED CONTEXT):</strong> A model can explain a decoded protocol or flag an
+unexpected topic. Example prompt: "Explain this authorized MQTT packet capture field
+by field and identify plaintext metadata without inventing payload contents."</p>
+<p><strong>Countermeasures and defense:</strong> Authenticate the gateway and broker, restrict topics,
+encrypt where supported, and remove unused radio and management services.</p>
+<blockquote>
+<p><strong>EXAM FOCUS:</strong> Match the function to the layer. Protocol translation means access
+gateway; device management means middleware; sensors mean edge. Trap: placing MQTT
+at the physical layer. It is an application protocol, normally carried over TCP.</p>
+</blockquote>
+<p><strong>Memory trick:</strong> "Every Access Internet Message Arrives": Edge, Access, Internet,
+Middleware, Application.</p>
+<h3 id="33-owasp-iot-top-10-attack-surfaces-and-device-vulnerabilities">3.3 OWASP IoT Top 10, attack surfaces, and device vulnerabilities</h3>
+<p><strong>What it is:</strong> OWASP lists recurring weaknesses, not a sequence of attacks.</p>
+<p><strong>Analogy:</strong> A building risk register lists unlocked doors, copied keys, old cameras,
+and unguarded loading bays before describing individual burglaries.</p>
+<p><strong>OWASP Top 10 IoT threats in notes order:</strong></p>
+<ol>
+<li>Weak, guessable, or hardcoded passwords.</li>
+<li>Insecure network services.</li>
+<li>Insecure ecosystem interfaces.</li>
+<li>Lack of secure update mechanisms.</li>
+<li>Use of insecure or outdated components.</li>
+<li>Insufficient privacy protection.</li>
+<li>Insecure data transfer and storage.</li>
+<li>Lack of device management.</li>
+<li>Insecure default settings.</li>
+<li>Lack of physical hardening.</li>
+</ol>
+<p><strong>Eighteen attack surfaces:</strong> ecosystem, device memory, physical interfaces, web
+interface, firmware, network services, administrative interface, local storage,
+cloud web interface, third-party backend APIs, update mechanism, mobile application,
+vendor backend APIs, ecosystem communication, network traffic,
+authentication/authorization, privacy, and hardware sensors.</p>
+<p><strong>The seventeen vulnerability lessons:</strong></p>
+<ul>
+<li>Username enumeration reveals valid names through different authentication responses.</li>
+<li>Weak passwords such as 1234 and unchanged factory passwords permit guessing.</li>
+<li>No lockout after three to five failures permits continued guessing.</li>
+<li>Unencrypted services expose traffic; weak implementations such as SSLv2 are not
+  adequate merely because encryption is present.</li>
+<li>Missing two-factor authentication leaves one stolen secret sufficient.</li>
+<li>Updates without TLS or file encryption, and world-writable update storage, allow
+  tampering. No manual check or no update mechanism leaves flaws unresolved.</li>
+<li>Denial of service can disable one service or the entire device.</li>
+<li>Removable storage and firmware extraction can reveal source, binaries, passwords,
+  and SSH keys. Hidden firmware version and update date hinder risk decisions.</li>
+<li>JTAG with a debugger can alter execution; side channels can leak or change behavior.</li>
+<li>Serial console access can yield a full shell even when boot protections exist.</li>
+<li>Outdated BusyBox, OpenSSL, SSH, or web server components carry known weaknesses.</li>
+</ul>
+<p><strong>Real-world use:</strong> An authorized reviewer extracts a camera firmware image, finds a
+hardcoded credential, and reports it before the same credential is used at scale.</p>
+<p><strong>Tools and commands used here:</strong> Binwalk, Firmware Mod Kit, strings, hexdump, GDB,
+OpenOCD, BUS Auditor, Shodan, and Nmap appear in later topics.</p>
+<p><strong>AI angle (ADDED CONTEXT):</strong> AI can map findings to OWASP categories, but evidence
+must support each mapping. Prompt: "Classify these verified findings under the OWASP
+IoT Top 10 and quote the supporting observation for each."</p>
+<p><strong>Countermeasures and defense:</strong> Unique credentials, lockout, MFA, signed updates,
+component inventory, data minimization, encrypted storage, lifecycle management,
+secure defaults, disabled debug ports, and tamper resistance address the list.</p>
+<blockquote>
+<p><strong>EXAM FOCUS:</strong> An insecure mobile app, cloud API, or backend belongs to the IoT
+ecosystem too. Trap: choosing only the physical device. Hardcoded password is a
+credential flaw; outdated OpenSSL is an insecure/outdated component.</p>
+</blockquote>
+<p><strong>Memory trick:</strong> For the Top 10, group them as "Secrets, Services, Surrounding
+interfaces, Software updates and Supply components; Privacy, Protection of data,
+Provisioning, Presets, Physical access."</p>
+<h3 id="34-iot-threat-catalogue-ddos-botnets-and-hvac-pivoting">3.4 IoT threat catalogue, DDoS botnets, and HVAC pivoting</h3>
+<p><strong>What it is:</strong> The notes list 21 threats: DDoS, HVAC attack, rolling code,
+BlueBorne, jamming, backdoor remote access, Telnet remote access, Sybil, exploit kits,
+MITM, replay, forged malicious device, side channel, ransomware, client
+impersonation, SQL injection, SDR-based attack, fault injection, network pivoting,
+DNS rebinding, and firmware-over-the-air (FOTA) update attack.</p>
+<p><strong>Analogy:</strong> A botnet is a crowd of compromised smart devices all knocking on one
+door at the attacker's signal.</p>
+<p><strong>How an IoT DDoS works:</strong></p>
+<ol>
+<li>The attacker exploits device weaknesses and installs malicious software.</li>
+<li>Remote access turns many devices into bots, collectively an army of botnets.</li>
+<li>A command-and-control (C2 or C&amp;C) center sends instructions.</li>
+<li>Distributed bots send a large request volume to the target.</li>
+<li>The server exhausts resources, goes offline, or cannot process further requests.</li>
+</ol>
+<p><strong>HVAC attack steps:</strong></p>
+<ol>
+<li>Shodan identifies an exposed, vulnerable industrial control or HVAC system.</li>
+<li>Default credentials provide access to the ICS/HVAC interface.</li>
+<li>The attacker changes temperature or uses the trusted connection to enter the LAN.</li>
+<li>The compromised building system becomes a network-pivoting foothold.</li>
+</ol>
+<p><strong>Real-world use:</strong> An assessor finds that a facilities network can reach finance.
+The safest result is a segmentation finding, not an attempt to alter temperature.</p>
+<p><strong>Tools and commands used here:</strong> Shodan, Censys, Nmap, botnet malware, and the
+iRidium interface shown in the HVAC example.</p>
+<p><strong>AI angle (ADDED CONTEXT):</strong> Attackers can generate convincing phishing content for
+initial compromise. Defenders can cluster traffic to identify bot-like behavior.
+Prompt: "Summarize common timing and destination features in this authorized flow
+export and list benign explanations."</p>
+<p><strong>Countermeasures and defense:</strong> Remove internet exposure, change credentials, patch,
+segment facilities networks, rate-limit, filter egress, and prepare DDoS absorption
+with the ISP or upstream provider.</p>
+<blockquote>
+<p><strong>EXAM FOCUS:</strong> C2 coordinates bots; the target server is the victim of the flood.
+HVAC is often the initial access or pivot, not the final target. Trap: calling
+every large infection a DDoS before a flood is launched.</p>
+</blockquote>
+<p><strong>Memory trick:</strong> DDoS chain is "Break in, Bot, Beacon, Blast, Blackout."</p>
+<h3 id="35-rolling-code-and-jamming-attacks">3.5 Rolling-code and jamming attacks</h3>
+<p><strong>What it is:</strong> A rolling code, or hopping code, changes on each key-fob use to stop
+simple reuse. The described attack combines jamming, capture, and selective replay.
+Jamming means transmitting interference on the same frequency so endpoints cannot
+reliably send or receive messages.</p>
+<p><strong>Analogy:</strong> An attacker blocks a mailbox, collects two signed entry slips, hands
+over the first to avoid suspicion, and keeps the second unused slip.</p>
+<p><strong>How the rolling-code attack works:</strong></p>
+<ol>
+<li>The victim presses the fob. The attacker jams the car receiver and sniffs code one.</li>
+<li>The car does not unlock, so the victim presses again.</li>
+<li>The attacker captures code two and forwards code one, which unlocks the car.</li>
+<li>Code two remains unused and valid in the receiver's expected sequence.</li>
+<li>The attacker later replays code two to unlock the vehicle.</li>
+</ol>
+<p><strong>How jamming works:</strong> The attacker determines the sensor frequency, transmits random
+radio energy there, and reduces the signal-to-noise ratio until communication fails.</p>
+<p><strong>Real-world use:</strong> A vehicle-security team tests a owned fleet receiver in a shielded
+environment and confirms that request failure plus a second press is a warning sign.</p>
+<p><strong>Tools and commands used here:</strong> RFCrack, YardStick One, HackRF One, RTL-SDR,
+<code>RFCrack.py -j</code>, and <code>RFCrack.py -r</code> with modulation and frequency options.</p>
+<p><strong>Countermeasures and defense:</strong> Use authenticated, freshness-protected protocols,
+receiver-side anomaly detection, rolling-window limits, and user warnings after
+repeated failed unlocks. Encryption alone does not prevent radio jamming.</p>
+<blockquote>
+<p><strong>EXAM FOCUS:</strong> The second code is saved; the first code is forwarded to preserve
+normal behavior. Trap: a basic replay resends an old message, while this scenario
+specifically needs jamming plus capture of an unused future code.</p>
+</blockquote>
+<p><strong>Memory trick:</strong> "Jam one, Grab one; Jam two, Grab two; Send one, Save two."</p>
+<h3 id="36-backdoors-telnet-blueborne-and-smart-grid-compromise">3.6 Backdoors, Telnet, BlueBorne, and smart-grid compromise</h3>
+<p><strong>What it is:</strong> A backdoor is hidden or unauthorized access that bypasses normal
+authentication. Telnet is an old remote terminal protocol whose normal traffic,
+including credentials, is plaintext. BlueBorne is a family of Bluetooth attacks;
+the notes associate it with airborne replay, fuzzing, and jamming using SDR hardware.</p>
+<p><strong>Analogy:</strong> A phishing attachment is a fake delivery worker who quietly installs a
+spare key inside the building.</p>
+<p><strong>How the smart-grid example works:</strong></p>
+<ol>
+<li>The attacker profiles employees using social engineering.</li>
+<li>A legitimate-looking phishing email carries a malicious attachment.</li>
+<li>Opening it installs a backdoor and gives access to the private network.</li>
+<li>The attacker pivots to SCADA and disables a UPS or other power controls.</li>
+<li>Loss of power causes operational impact.</li>
+</ol>
+<p><strong>How Telnet access works:</strong> Scanning or Shodan reveals TCP 23. Weak/default login
+details or an unprotected service then provide a remote command session. The example
+also shows a Dahua DVR and HTTP port 80, so an open web port is not itself Telnet.</p>
+<p><strong>Real-world use:</strong> A utility removes direct Telnet, requires a VPN and jump host,
+and trains staff to report attachments instead of testing them on production systems.</p>
+<p><strong>Tools and commands used here:</strong> Shodan, Censys, Nmap, HackRF One, and Telnet.</p>
+<p><strong>AI angle (ADDED CONTEXT):</strong> Generative AI can make phishing grammatically convincing
+and deepfake voice can support impersonation. Defenders should verify unusual requests
+through a second channel. Prompt for awareness work: "List benign warning signs in
+this fictional email without improving its persuasive content."</p>
+<p><strong>Countermeasures and defense:</strong> Use SSH rather than Telnet, email filtering, attachment
+sandboxing, MFA, least privilege, Bluetooth patching, and restricted device discovery.</p>
+<blockquote>
+<p><strong>EXAM FOCUS:</strong> SSH is the secure Telnet replacement. BlueBorne is Bluetooth, not
+Wi-Fi. Trap: choosing a firewall as the complete answer to phishing; user reporting
+and endpoint/email controls address the initial attachment.</p>
+</blockquote>
+<p><strong>Memory trick:</strong> "Telnet Talks in Text"; "BlueBorne Bites Bluetooth."</p>
+<h3 id="37-sdr-attacks-local-discovery-and-dns-rebinding">3.7 SDR attacks, local discovery, and DNS rebinding</h3>
+<p><strong>What it is:</strong> Software-defined radio (SDR) implements radio functions in software.
+It can inspect, modify, generate, or replay signals. DNS rebinding makes a browser
+resolve one hostname first to an attacker and then to a private address, helping
+malicious script reach local devices through the victim browser.</p>
+<p><strong>Analogy:</strong> SDR is a programmable musical instrument that can learn and replay many
+songs. DNS rebinding is a signpost that is changed after a visitor passes the gate.</p>
+<p><strong>Three SDR methods in the notes:</strong></p>
+<ol>
+<li><strong>Replay:</strong> discover the frequency, capture an original command, isolate the command
+   sequence, and inject it back into the IoT network.</li>
+<li><strong>Cryptanalysis:</strong> capture and reverse-engineer the signal/protocol, requiring
+   knowledge of cryptography, communication theory, and modulation.</li>
+<li><strong>Reconnaissance:</strong> inspect specifications and hardware; a multimeter and chipset
+   inspection can identify ground pins, product IDs, and other information.</li>
+</ol>
+<p><strong>Local device discovery steps:</strong></p>
+<ol>
+<li>A user visits an attacker-controlled advertisement or page.</li>
+<li>Malicious code obtains the local IP and probes available private addresses.</li>
+<li>Active devices may return TCP RST; inactive ones may time out.</li>
+<li>Responses reveal devices and potentially access-point UID and BSSID information.</li>
+<li>A tool such as Singularity of Origin tests DNS rebinding.</li>
+<li>Successful rebinding lets the page interact with local device interfaces.</li>
+</ol>
+<p><strong>Real-world use:</strong> A browser-security assessment uses a dedicated test network to
+show why an unauthenticated local camera interface is reachable from a web page.</p>
+<p><strong>Tools and commands used here:</strong> HackRF One, RTL-SDR, RFCrack, Singularity of Origin,
+Wireshark, and TCP SYN/RST responses.</p>
+<p><strong>Countermeasures and defense:</strong> Authenticate local interfaces, validate Host headers,
+use DNS rebinding protections, isolate IoT networks, and require explicit user approval
+for local network access where the platform supports it.</p>
+<blockquote>
+<p><strong>EXAM FOCUS:</strong> RST can reveal a closed port on a live host; timeout gives less
+certain evidence. BSSID identifies a wireless access point radio. Trap: calling
+rebinding ordinary DNS spoofing; rebinding abuses changing answers and browser trust.</p>
+</blockquote>
+<p><strong>Memory trick:</strong> SDR does "Record, Reverse, Recon"; rebinding does "Answer, Alter,
+Access."</p>
+<h3 id="38-fault-injection-and-the-remaining-iot-attack-types">3.8 Fault injection and the remaining IoT attack types</h3>
+<p><strong>What it is:</strong> Fault injection, also called perturbation, deliberately disturbs
+hardware so it skips checks, leaks data, or executes unintended behavior. It can be
+invasive, which alters or opens the package, or non-invasive, which works externally.</p>
+<p><strong>Analogy:</strong> A momentary flicker can make a cashier skip a verification step.</p>
+<p><strong>Fault methods and other attacks:</strong></p>
+<ul>
+<li>Optical, electromagnetic fault injection (EMFI), and body-bias injection (BBI) use
+  lasers, electromagnetic pulses, or bias changes.</li>
+<li>Power, clock, and reset glitching disturb supply or timing.</li>
+<li>Voltage/frequency tampering changes operating conditions; temperature attacks alter
+  the chip environment.</li>
+<li>Sybil uses multiple forged identities, for example to simulate traffic congestion.</li>
+<li>Exploit kits automate scripts against poorly patched vulnerabilities.</li>
+<li>MITM secretly intercepts and can modify two-party communication.</li>
+<li>Replay resends captured valid messages, potentially causing repeated actions or DoS.</li>
+<li>Forged malicious device replacement needs physical or supply-chain access.</li>
+<li>Side channel derives secrets from emissions or behavior rather than breaking math.</li>
+<li>Ransomware locks a screen or encrypts files to deny access until payment is demanded.</li>
+<li>Client impersonation pretends to be a legitimate client; SQL injection inserts
+  database commands through unsafe input; FOTA attacks abuse firmware updates.</li>
+</ul>
+<p><strong>Real-world use:</strong> A hardware lab tests whether a voltage glitch bypasses secure boot
+on a development board, then adds brownout detection and boot verification.</p>
+<p><strong>Tools and commands used here:</strong> Oscilloscope, signal analyzer, multimeter, glitching
+equipment, and debug interfaces.</p>
+<p><strong>Countermeasures and defense:</strong> Use secure boot, signed firmware, glitch sensors,
+constant-time authentication, tamper evidence, nonces and timestamps for anti-replay,
+input validation, parameterized SQL, and offline backups.</p>
+<blockquote>
+<p><strong>EXAM FOCUS:</strong> Fault injection changes execution conditions; side channel observes
+behavior. Sybil means many identities; MITM means an intermediary. Trap: selecting
+encryption as an anti-jamming control or a replay defense without freshness.</p>
+</blockquote>
+<p><strong>Memory trick:</strong> "Light, Magnet, Bias; Power, Clock, Reset; Volt, Hertz, Heat."</p>
+<h3 id="39-iot-malware-and-botnet-families">3.9 IoT malware and botnet families</h3>
+<p><strong>What it is:</strong> IoT malware turns weakly protected devices into botnet members,
+proxies, miners, ransomware victims, or attack platforms.</p>
+<p><strong>Analogy:</strong> One unchanged factory key can open thousands of houses of the same model.</p>
+<p><strong>How it works:</strong> KmsdBot's Kmsdx variant adds Telnet scanning/authentication, targets
+SSH exposure and default credentials, and supports more CPU architectures. The notes'
+Go-source analysis mentions <code>redress</code>, <code>main.go</code>, <code>ssh.go</code>, <code>telnet.go</code>, and a
+<code>telnet.txt</code> credential list. These are static-analysis clues, not commands to run.
+Other listed families are WailingCrab, P2PInfect, NKAbuse, IoTroop, and XorDdos.</p>
+<blockquote>
+<p><strong>ADDED CONTEXT:</strong> IoTroop is also known as Reaper. XorDdos targets Linux systems.
+P2PInfect uses peer-to-peer propagation and has targeted Redis. NKAbuse uses NKN
+networking for decentralized communication. WailingCrab has used MQTT for C2.
+Family capabilities change, so answer from the behavior described in the question.</p>
+</blockquote>
+<p><strong>Real-world use:</strong> A defender finds repeated outbound Telnet attempts from a camera.
+The response is isolation, credential replacement, firmware remediation, and checking
+peer devices rather than merely deleting one suspicious process.</p>
+<p><strong>Tools and commands used here:</strong> Redress for Go binary inspection, Shodan, Censys,
+network monitoring, and anti-malware tools.</p>
+<p><strong>AI angle (ADDED CONTEXT):</strong> AI can help label static functions but may hallucinate
+malware capabilities. Prompt: "Describe only observable behavior in these decompiled
+snippets and mark uncertain claims; do not generate propagation code."</p>
+<p><strong>Countermeasures and defense:</strong> Unique credentials, disable Telnet, restrict egress,
+patch firmware, monitor unusual scanning, and rebuild compromised devices from trusted
+images.</p>
+<blockquote>
+<p><strong>EXAM FOCUS:</strong> Default credentials plus broad architecture support increase botnet
+reach. Trap: treating Telnet scanning as exploitation of SSH; they are different
+services even when one malware family targets both.</p>
+</blockquote>
+<p><strong>Memory trick:</strong> "Scan, Sign in, Spread, Serve C2."</p>
+<h3 id="310-information-gathering-with-shodan-and-wireless-sniffing">3.10 Information gathering with Shodan and wireless sniffing</h3>
+<p><strong>What it is:</strong> Information gathering identifies exposed devices and their protocols
+before vulnerability validation. Shodan indexes internet-facing services; sniffing
+observes traffic within range or on a monitored network.</p>
+<p><strong>Analogy:</strong> Shodan is a searchable directory of public shop signs; sniffing is
+listening to conversations on a network you are authorized to monitor.</p>
+<p><strong>How it works:</strong></p>
+<ol>
+<li>Query Shodan for <code>webcamxp country:"US"</code>, <code>webcamxp city:"paris"</code>, or
+   <code>webcamxp geo:"-50.81,201.80"</code> as shown in the notes.</li>
+<li>Review IP, hostname, ISP, location, ports, and service banners without assuming
+   that a banner proves exploitability.</li>
+<li>Scan authorized ranges for HTTP ports 80, 81, 8080, and 8081.</li>
+<li>Identify the wireless adapter with <code>ifconfig</code>, enable monitor mode, discover the
+   target channel, then capture that channel in Wireshark.</li>
+<li>The notes' capture shows MQTT Ping Request/Response and Publish exchanges, with
+   destination TCP 1883.</li>
+</ol>
+<p><strong>Real-world use:</strong> An asset owner confirms that no camera is internet exposed and
+uses an approved wireless capture to identify plaintext telemetry.</p>
+<p><strong>Tools and commands used here:</strong> Shodan, MultiPing, FCC ID Search, Censys, FOFA,
+Nmap, ifconfig, Airmon-ng, Airodump-ng, Wireshark, Suphacap, and IoT sniffing tools.</p>
+<p><strong>AI angle (ADDED CONTEXT):</strong> ChatGPT or ShellGPT can explain a command before an
+approved scan. Prompt: "Explain each Nmap flag in this authorized HTTP discovery
+command and warn which options increase traffic." Never paste private scope or
+credentials into a public model.</p>
+<p><strong>Countermeasures and defense:</strong> Remove public administration interfaces, change
+identifying banners where practical, encrypt MQTT with TLS, use broker ACLs, and
+monitor for unexpected monitor-mode or scanning activity.</p>
+<blockquote>
+<p><strong>EXAM FOCUS:</strong> Shodan is search, not an exploit framework. Monitor mode captures
+wireless frames; the channel must match. Trap: <code>airodump-ng</code> scans/captures while
+<code>airmon-ng</code> configures monitor mode.</p>
+</blockquote>
+<p><strong>Memory trick:</strong> "Shodan Sees, Nmap Scans, Wireshark Watches."</p>
+<h3 id="311-iot-vulnerability-scanning-and-validation">3.11 IoT vulnerability scanning and validation</h3>
+<p><strong>What it is:</strong> Vulnerability scanning checks discovered devices for default
+credentials, known weaknesses, product paths, and versions.</p>
+<p><strong>Analogy:</strong> A safety inspector checks each lock model against a recall list instead
+of forcing every door.</p>
+<p><strong>How it works:</strong> IoTSeeker's Perl scanner accepts IP addresses and reports device
+type and whether the default password remains. Genzai identifies routers, cameras,
+and HMIs, then tests default passwords and vulnerabilities based on paths and
+versions. Its example mentions a TP-Link router result. Other listed tools are
+beSTORM, IoTSploit, IoTVAS, and Firmalyzer.</p>
+<p><strong>Real-world use:</strong> A hospital runs an approved credentialed scan against decommissioned
+test cameras and prioritizes any device still using factory credentials.</p>
+<p><strong>Tools and commands used here:</strong> IoTSeeker/IotScanner.pl, Genzai, beSTORM,
+IoTSploit, IoTVAS, Firmalyzer, and Nmap.</p>
+<p><strong>Countermeasures and defense:</strong> Use an asset inventory, authenticated configuration
+review, vendor advisories, firmware updates, and manual validation of high-risk results.
+Avoid password attempts or intrusive scans outside authorization and maintenance windows.</p>
+<blockquote>
+<p><strong>EXAM FOCUS:</strong> Discovery finds devices; vulnerability scanning maps them to known
+weaknesses; exploitation proves impact. Trap: treating "changed password" as proof
+that the password is strong or the device is fully patched.</p>
+</blockquote>
+<p><strong>Memory trick:</strong> "Seeker Seeks Secrets; Genzai Gathers Versions."</p>
+<h3 id="312-rfcrack-open-sniffer-and-hackrf-one">3.12 RFCrack, Open Sniffer, and HackRF One</h3>
+<p><strong>What it is:</strong> These are radio test tools. RFCrack works with YardStick One for
+sub-GHz tests. Open Sniffer captures IEEE 802.15.4/Zigbee frames into Wireshark and
+can transmit frames. HackRF One is a half-duplex SDR covering about 1 MHz to 6 GHz.</p>
+<p><strong>Analogy:</strong> They are universal radio microscopes, with some models also able to speak.</p>
+<p><strong>How it works:</strong></p>
+<ol>
+<li>RFCrack live replay uses <code>-i</code>; rolling-code mode uses <code>-r</code> with <code>-M MOD_2FSK</code>
+   and a frequency such as <code>-F 314350000</code>; <code>-U -100 -L -10</code> sets RSSI bounds;
+   <code>-j -F 314000000</code> selects jamming.</li>
+<li>Open Sniffer captures Zigbee beacon and command frames, permits visualization,
+   supports user-defined replay, and can continuously emit packets for DoS testing.</li>
+<li>HackRF supports receive and transmit, but not simultaneously in full duplex.
+   It can inspect protocols from GSM to Z-Wave and support replay, fuzzing, or jamming.</li>
+</ol>
+<p><strong>Real-world use:</strong> A lab uses RFCrack on a owned sub-GHz gate controller and Open
+Sniffer on an isolated Zigbee network to verify replay resistance.</p>
+<p><strong>Tools and commands used here:</strong> RFCrack.py, YardStick One, Open Sniffer, Wireshark,
+HackRF One, KillerBee, and CatSniffer.</p>
+<p><strong>Countermeasures and defense:</strong> Use cryptographic authentication and freshness,
+monitor spectrum anomalies, reduce radio range where possible, and test only in a
+controlled RF environment.</p>
+<blockquote>
+<p><strong>EXAM FOCUS:</strong> MOD_2FSK is modulation, frequency is in Hz, RSSI bounds select
+signal strength, and half duplex means one direction at a time. Trap: selecting
+Wireshark as the radio transmitter; it primarily decodes and analyzes captures.</p>
+</blockquote>
+<p><strong>Memory trick:</strong> "I is Immediate replay, R is Rolling, J is Jamming, F is Frequency."</p>
+<h3 id="313-hackrf-replay-and-hardware-communication-buses">3.13 HackRF replay and hardware communication buses</h3>
+<p><strong>What it is:</strong> A replay capture stores radio samples and transmits them again. Hardware
+buses expose internal communications and debugging functions.</p>
+<p><strong>Analogy:</strong> A sample file is an audio recording of a radio conversation. UART, SPI,
+I2C, and JTAG are different service hatches on the circuit board.</p>
+<p><strong>How it works:</strong></p>
+<ol>
+<li>FCC ID records or an RTL-SDR help identify a target transmitter's frequency.</li>
+<li><code>hackrf_transfer -r</code> receives raw samples; <code>-t</code> transmits a capture; <code>-f</code> sets
+   frequency, and gain options control receive or transmit amplification.</li>
+<li><code>hackrf_info</code> confirms board identity and firmware version.</li>
+<li>BUS Auditor scans pin combinations and voltage settings for UART or I2C.</li>
+<li>UART output can reveal RX/TX pins and baud rate such as 9600; I2C output reveals
+   device address plus SCL clock and SDA data pins.</li>
+</ol>
+<p><strong>Interface meanings:</strong> UART is asynchronous serial communication. SPI is synchronous
+serial communication with a controller and peripherals. I2C is addressed two-wire
+communication. JTAG is a test/debug interface useful for firmware and execution access.
+DIVA is a training application, and a PCB is the physical circuit board inspected.</p>
+<p><strong>Real-world use:</strong> A product team locates an enabled debug UART on a prototype,
+observes boot logs, and disables sensitive console access before release.</p>
+<p><strong>Tools and commands used here:</strong> HackRF One, RTL-SDR, BUS Auditor, DIVA, multimeter,
+GDB, and OpenOCD.</p>
+<p><strong>Countermeasures and defense:</strong> Lock or disable debug interfaces in production,
+require authenticated debug unlock, use tamper detection, and never rely on hidden
+test points as a security boundary.</p>
+<blockquote>
+<p><strong>EXAM FOCUS:</strong> UART commonly leads to a console; JTAG commonly leads to debugging;
+I2C uses SCL and SDA. Trap: confusing a baud rate with radio frequency.</p>
+</blockquote>
+<p><strong>Memory trick:</strong> "UART Usually A Root Terminal; JTAG Joins Test And Debug Gates."</p>
+<h3 id="314-nand-glitching-camover-and-telnet-access">3.14 NAND glitching, CamOver, and Telnet access</h3>
+<p><strong>What it is:</strong> NAND glitching interrupts boot by grounding a serial I/O pin of flash
+memory, with the goal of bypassing normal startup and gaining root. CamOver targets
+certain network-camera password-disclosure weaknesses.</p>
+<p><strong>Analogy:</strong> NAND glitching distracts a guard during the first seconds of a shift.
+CamOver uses a known defective desk procedure to ask for the administrator key.</p>
+<p><strong>How it works:</strong></p>
+<ol>
+<li>For NAND glitching, identify the flash and timing, disturb serial I/O during boot,
+   and inspect whether a privileged console appears. Results are hardware dependent.</li>
+<li>Start CamOver with <code>camover</code>; choose one address with <code>-a</code>, input files with <code>-i</code>,
+   output with <code>-o</code>, threads with <code>-t</code>, or internet results through Shodan/ZoomEye.</li>
+<li>For Telnet, identify open TCP 23 and use only authorized credentials. Shodan or
+   Censys may expose a device banner before any login attempt.</li>
+</ol>
+<p><strong>Real-world use:</strong> An authorized camera audit verifies whether a patched firmware
+release removes password disclosure and whether Telnet is fully disabled.</p>
+<p><strong>Tools and commands used here:</strong> CamOver, Shodan, ZoomEye, Censys, Nmap, Telnet,
+multimeter, and hardware-glitching tools.</p>
+<p><strong>Countermeasures and defense:</strong> Patch camera firmware, restrict management networks,
+replace Telnet with SSH, require strong unique credentials, and add boot/flash glitch
+detection.</p>
+<blockquote>
+<p><strong>EXAM FOCUS:</strong> CamOver is a camera exploitation tool, not a generic camera search
+engine. <code>-a</code> is one address; <code>-t</code> means threads in its usage, not target.
+Trap: trying Shodan API access without a key when a local <code>-a</code> test is intended.</p>
+</blockquote>
+<p><strong>Memory trick:</strong> "Camera Address = CamOver -a; Telnet Twenty-Three = Text."</p>
+<h3 id="315-maintaining-access-through-firmware-modification">3.15 Maintaining access through firmware modification</h3>
+<p><strong>What it is:</strong> Firmware is the low-level software that runs a device. An attacker who
+modifies and reinstalls it can persist across ordinary account changes.</p>
+<p><strong>Analogy:</strong> Instead of keeping a copied house key, the intruder replaces the lock's
+internal instructions so it always admits them.</p>
+<p><strong>How it works:</strong></p>
+<ol>
+<li>After authorized access in an assessment, obtain the firmware image.</li>
+<li>Firmware Mod Kit's <code>extract-firmware.sh</code> identifies and extracts components.</li>
+<li>The DD-WRT example shows a TRX header, gzip/LZMA compressed data, and a Squashfs
+   filesystem, plus a checksum and offsets.</li>
+<li>Modify files only in an owned lab image, reconstruct it, and verify whether the
+   device accepts unsigned or improperly validated firmware.</li>
+<li>The security finding is an update-verification failure with persistence impact.</li>
+</ol>
+<p><strong>Real-world use:</strong> A vendor test shows that a modified image is rejected because
+secure boot checks a trusted signature. This proves the control, not an attack success.</p>
+<p><strong>Tools and commands used here:</strong> Firmware Mod Kit, Binwalk, dd, file, strings,
+hexdump, mount, GDB, and QEMU.</p>
+<p><strong>Countermeasures and defense:</strong> Require signed images, verify a hardware root of
+trust, use rollback protection, protect update storage, and reflash compromised
+devices from known-good media.</p>
+<blockquote>
+<p><strong>EXAM FOCUS:</strong> Firmware modification is maintaining access, not initial access.
+Squashfs is a compressed filesystem; TRX is a router firmware image format.
+Trap: assuming password removal deletes implanted firmware.</p>
+</blockquote>
+<p><strong>Memory trick:</strong> "Extract, Examine, Edit, Encode, Evaluate."</p>
+<h3 id="316-firmware-analysis-and-reverse-engineering">3.16 Firmware analysis and reverse engineering</h3>
+<p><strong>What it is:</strong> Static analysis inspects an image without running it. Dynamic analysis
+observes emulated or real execution. Reverse engineering reconstructs behavior.</p>
+<p><strong>Analogy:</strong> Static analysis opens and catalogs a machine; dynamic analysis runs it
+behind safety glass.</p>
+<p><strong>How it works:</strong></p>
+<ol>
+<li>Obtain firmware from the device or vendor and verify the MD5 value as an integrity
+   comparison, not as collision-resistant security.</li>
+<li>Run <code>file</code>, <code>strings</code>, and <code>hexdump</code> on the <code>.bin</code>; use Binwalk to identify and
+   extract embedded data, and <code>dd</code> for precise byte ranges.</li>
+<li>Create <code>rootfs</code>, mount the extracted filesystem when appropriate, and inspect
+   <code>etc/passwd</code>, <code>etc/shadow</code>, and <code>etc/ssl</code>.</li>
+<li>Search recursively for password, admin, root, <code>.conf</code>, <code>.pem</code>, and <code>.crt</code> data.</li>
+<li>Emulate binaries with <code>qemu-mipsel</code>, <code>qemu-arm</code>, or the matching QEMU architecture
+   and <code>-L</code> library prefix. Test the web interface dynamically.</li>
+</ol>
+<p><strong>Goals from the notes:</strong> passwords, API tokens, endpoints, vulnerable services,
+backdoor accounts, configuration files, private keys, and stored data.</p>
+<p><strong>Real-world use:</strong> An assessor recovers an API token from a vendor-supplied image
+and proves exposure without touching production cameras.</p>
+<p><strong>Tools and commands used here:</strong> File, MD5 tools, strings, hexdump, Binwalk, dd,
+mount, grep, find, QEMU, GDB, Radare2, Ghidra, and IDA Pro.</p>
+<p><strong>AI angle (ADDED CONTEXT):</strong> AI can suggest likely meanings for strings or decompiled
+functions. Prompt: "Summarize evidence in this firmware string listing and distinguish
+hardcoded secrets from harmless words containing 'key'."</p>
+<p><strong>Countermeasures and defense:</strong> Strip secrets, use per-device credentials, protect
+keys in secure hardware, remove debug artifacts, sign firmware, and manage third-party
+components.</p>
+<blockquote>
+<p><strong>EXAM FOCUS:</strong> Binwalk extracts; QEMU emulates; strings finds printable sequences;
+grep searches content; find searches names. Trap: choosing QEMU for static extraction
+or Binwalk for full processor emulation.</p>
+</blockquote>
+<p><strong>Memory trick:</strong> "Get, Verify, View, Unpack, Mount, Mine, Mimic."</p>
+<h3 id="317-general-iot-hacking-and-device-management-tools">3.17 General IoT hacking and device-management tools</h3>
+<p><strong>What it is:</strong> Each tool serves a different assessment surface.</p>
+<p><strong>Analogy:</strong> A radio stethoscope, protocol screwdriver, and router toolbox are not
+interchangeable just because all are used on smart devices.</p>
+<p><strong>How it works:</strong> CatSniffer passively monitors IoT traffic and supported CC1352-based
+radio protocols. KillerBee assesses Zigbee/IEEE 802.15.4. JAGulator helps identify
+JTAG pinouts. <code>wiz_exploit</code> is listed as an IoT exploitation project; PENIOT tests
+IoT device penetration; RouterSploit targets embedded devices and routers. Device
+management platforms onboard, monitor, permission, and remotely update fleets.</p>
+<p><strong>Management products in the notes:</strong> SeaCat.io, Armis Centrix, Oracle Fusion Cloud
+IoT, Golioth, AWS IoT Device Management, IBM Watson IoT Platform, openBalena, and
+Microsoft Azure IoT Central shown in the dashboard.</p>
+<p><strong>Real-world use:</strong> A retailer uses a management platform to inventory devices, enforce
+unique identities, roll out signed updates, and revoke a lost gateway.</p>
+<p><strong>Tools and commands used here:</strong> CatSniffer, KillerBee, JAGulator, wiz_exploit,
+PENIOT, RouterSploit, and the management platforms above.</p>
+<p><strong>Countermeasures and defense:</strong> Device management itself needs MFA, role separation,
+signed updates, audit logs, and secure decommissioning because it has fleet-wide power.</p>
+<blockquote>
+<p><strong>EXAM FOCUS:</strong> Armis emphasizes asset visibility; JAGulator is JTAG; RouterSploit
+is embedded/router exploitation. Trap: calling a management platform a vulnerability
+scanner only.</p>
+</blockquote>
+<p><strong>Memory trick:</strong> "Cat Catches packets, KillerBee knows Zigbee, JAGulator finds JTAG."</p>
+<h3 id="318-iot-countermeasures-manufacturer-guidance-and-hardware-practice">3.18 IoT countermeasures, manufacturer guidance, and hardware practice</h3>
+<p><strong>What it is:</strong> Defense covers accounts, network exposure, updates, physical access,
+and operational lifecycle.</p>
+<p><strong>Analogy:</strong> Good IoT security is building security plus key control plus maintenance,
+not one stronger lock.</p>
+<p><strong>The fourteen defenses in the notes:</strong></p>
+<ol>
+<li>Disable guest and demo accounts.</li>
+<li>Lock accounts after excessive invalid logins.</li>
+<li>Use strong authentication.</li>
+<li>Place control networks behind firewalls and isolate them from business networks.</li>
+<li>Deploy IDS/IPS.</li>
+<li>Use end-to-end encryption and PKI.</li>
+<li>Use VPN architecture for secure communication.</li>
+<li>Deploy security as an integrated system.</li>
+<li>Permit only trusted internet source IPs where appropriate.</li>
+<li>Disable Telnet on port 23.</li>
+<li>Disable UPnP on routers.</li>
+<li>Prevent physical tampering.</li>
+<li>Patch and update firmware regularly.</li>
+<li>Monitor TCP 48101 because the cited infected devices spread malicious files there.</li>
+</ol>
+<p><strong>Manufacturer and OWASP solutions:</strong> Use TLS and certificate/revocation checks,
+strong passwords, lockout, simple secure updates, application allowlisting, and a
+secure boot chain. Close ports, disable UPnP, assess APIs, validate input/output,
+verify update source/integrity, notify users, remove unused dependencies, minimize
+and anonymize data, protect stored/transferred data, manage assets and
+decommissioning, change defaults, restrict remote access, protect BIOS/firmware
+with unique passwords, control boot order, and minimize USB exposure. Avoid
+proprietary encryption.</p>
+<p><strong>Hardware practices:</strong> Limit entry points, tamper protection, secure-boot monitoring,
+patches, interface management, restricted hardware access, protected keys and
+credentials, event logs, anti-malware, isolation from regular supply units, and a
+root of trust.</p>
+<blockquote>
+<p><strong>EXAM FOCUS:</strong> A hardware root of trust anchors secure boot. Lockout slows online
+guessing but can enable lockout abuse, so combine it with monitoring and MFA.
+Trap: selecting UPnP disablement as a firmware-integrity control.</p>
+</blockquote>
+<p><strong>Memory trick:</strong> "Accounts, Access, Algorithms, Updates, Assets, Anatomy" groups
+identity, network, crypto, patching, management, and hardware.</p>
+<h3 id="319-ot-ics-components-and-itot-convergence">3.19 OT, ICS components, and IT/OT convergence</h3>
+<p><strong>What it is:</strong> Operational technology (OT) is hardware and software that detects or
+causes change in industrial operations by monitoring or controlling physical devices.
+An industrial control system (ICS) is the collection of systems, networks, devices,
+and controls that automate industrial processes.</p>
+<p><strong>Analogy:</strong> IT manages information; OT manages the movement and condition of the
+physical world.</p>
+<p><strong>Components:</strong></p>
+<ul>
+<li>PLC: programmable logic controller executing local deterministic control logic.</li>
+<li>RTU: remote terminal unit collecting field data and issuing control at remote sites.</li>
+<li>SCADA: supervisory control and data acquisition across geographically distributed
+  processes.</li>
+<li>DCS: distributed control system coordinating controllers within a plant/process.</li>
+<li>HMI: human-machine interface for display and operator commands.</li>
+<li>BPCS: basic process control system; SIS: safety instrumented system for safe states.</li>
+<li>IED: intelligent electronic device; VFD: variable-frequency drive for motor speed.</li>
+<li>PID: proportional-integral-derivative control used to hold a process at a setpoint.</li>
+</ul>
+<p><strong>IT/OT convergence and IIoT:</strong> Integration links OT monitoring/control with IT storage
+and processing such as SQL, Java, and Python to improve security, quality, efficiency,
+and productivity. Industry 4.0 uses these ideas for smart manufacturing. IIoT is IoT
+applied to industrial operations, supply chains, manufacturing, and management.</p>
+<p><strong>Real-world use:</strong> A plant historian sends carefully brokered production data to IT
+analytics without allowing the analytics server to directly write to a safety PLC.</p>
+<p><strong>Tools and commands used here:</strong> Malcolm, Wireshark, Nmap OT scripts, Nessus,
+Skybox, and Microsoft Defender for IoT support later assessments.</p>
+<p><strong>AI angle (ADDED CONTEXT):</strong> Predictive maintenance models can detect failing motors.
+Poisoned sensor training data could hide failure. Prompt: "Identify data-quality checks
+for this maintenance dataset and do not recommend changes to live control setpoints."</p>
+<p><strong>Countermeasures and defense:</strong> Keep safety functions independent, broker IT/OT data
+through controlled zones, and design for availability and safe failure.</p>
+<blockquote>
+<p><strong>EXAM FOCUS:</strong> HMI is the operator window; PLC is local logic; SCADA supervises
+wide-area operations; DCS distributes plant control. Trap: treating SIS as an ordinary
+business availability system instead of a safety system.</p>
+</blockquote>
+<p><strong>Memory trick:</strong> "PLC Performs, RTU Reaches, SCADA Supervises, DCS Distributes,
+HMI Helps Humans."</p>
+<h3 id="320-purdue-model-and-ot-protocol-placement">3.20 Purdue model and OT protocol placement</h3>
+<p><strong>What it is:</strong> The Purdue Enterprise Reference Architecture (PERA) inspired a model
+of ICS zones and dependencies. The enterprise zone and manufacturing zone are
+separated by an industrial DMZ (IDMZ).</p>
+<p><strong>Analogy:</strong> A factory has public offices, a controlled reception, operations rooms,
+supervisor desks, machine controllers, and the machines themselves.</p>
+<p><strong>Levels:</strong></p>
+<ol>
+<li>Level 5: enterprise network.</li>
+<li>Level 4: business logistics systems.</li>
+<li>Level 3.5: IDMZ, the brokered boundary between IT and OT.</li>
+<li>Level 3: operations systems/site operations.</li>
+<li>Level 2: control systems/area supervisory control.</li>
+<li>Level 1: basic control/intelligent devices.</li>
+<li>Level 0: physical process, sensors, and actuators.</li>
+</ol>
+<p><strong>Protocol mapping from the notes:</strong></p>
+<ul>
+<li>Levels 4/5: DCOM, FTP/SFTP, GE-SRTP, IPv4/IPv6, OPC UA, TCP/IP, Wi-Fi, SMTP,
+  HTTP/HTTPS.</li>
+<li>Level 3: CC-Link, GE-SRTP, HSCP, ICCP (IEC 60870-6), IEC 61850, IEC 60870-5-104,
+  ISA/IEC 62443, Modbus, NTP, Profinet, SuiteLink, Tase.2, TCP/IP, ControlNet,
+  Profibus PA/DP.</li>
+<li>Level 2: 6LoWPAN, CC-Link, DNP3, DNS/DNSSEC, FTE, HART-IP, IEC 60870-5-101/104,
+  IPv4/IPv6, ISA/IEC 62443, OPC, NTP, SOAP, TCP/IP, DeviceNet, AS-Interface.</li>
+<li>Levels 0/1: BACnet, EtherCAT, CANopen, Crimson v3, GE-SRTP, Zigbee, ISA/IEC 62443,
+  ISA SP100, MELSEC-Q, Modbus, Niagara Fox, Omron FINS, PCWorx, Profibus, Profinet,
+  Sercos II, S7 Communications, WiMAX, and FOUNDATION Fieldbus.</li>
+</ul>
+<blockquote>
+<p><strong>ADDED CONTEXT:</strong> ISA/IEC 62443 is a security standard series, not a wire protocol.
+Protocols can appear at multiple levels depending on architecture. Learn the slide's
+representative placement, not an absolute rule that a protocol can exist at one level.</p>
+</blockquote>
+<p><strong>Real-world use:</strong> A design team places a patch broker and historian replica in the
+IDMZ rather than connecting the enterprise directly to Level 1 controllers.</p>
+<p><strong>Tools and commands used here:</strong> Firewalls, data diodes where suitable, protocol-aware
+monitoring, Malcolm, and securely configured jump hosts.</p>
+<p><strong>Countermeasures and defense:</strong> Define zones by function and risk, permit only required
+conduit traffic, and block direct enterprise-to-controller access.</p>
+<blockquote>
+<p><strong>EXAM FOCUS:</strong> Level 0 is physical process, not basic controller; Level 3.5 is IDMZ.
+Trap: placing business email at Level 2 or a PLC at Level 4.</p>
+</blockquote>
+<p><strong>Memory trick:</strong> "Five Enterprise, Four Business, Three Operations, Two Supervise,
+One Control, Zero Physical."</p>
+<h3 id="321-ot-challenges-and-vulnerabilities">3.21 OT challenges and vulnerabilities</h3>
+<p><strong>What it is:</strong> OT risk comes from old technology and from connections added faster
+than governance and protection.</p>
+<p><strong>Analogy:</strong> A historic machine newly connected to the internet has modern exposure
+but may still have decades-old locks.</p>
+<p><strong>The 22 challenges in notes order:</strong> lack of visibility; haphazard modernization;
+vulnerable communication protocols; plain-text passwords; network complexity; legacy
+technology; lack of antivirus; lack of skilled security professionals; rapid change;
+outdated systems; insecure connections; rogue devices; IT convergence; organizational
+challenges; unique production networks/proprietary software; remote management
+protocols; insufficient segmentation; physical security; vendor dependencies;
+resource constraints; lack of encryption; and data-integrity issues.</p>
+<p><strong>The ten vulnerability lessons:</strong> Publicly accessible OT permits brute force or
+disruption. Insecure jump boxes expose remote access. Missing updates leave known
+flaws. Default/weak credentials open management interfaces. Poor firewall rules
+spread threats. Compromised IT can reach OT placed in the corporate network, and
+insecure OT can also expose IT. Flat networks allow one compromise to expose all.
+Wireless without strong encryption/authentication permits sniffing and bypass.
+Unrestricted outbound OT internet access enables malware and C2.</p>
+<p><strong>Real-world use:</strong> A risk review finds a vendor jump host with shared credentials
+and direct controller access. The best fix is layered managed remote access, not
+just changing the shared password once.</p>
+<p><strong>Tools and commands used here:</strong> Asset inventory, passive monitoring, firewall/ACL
+review, vulnerability assessment, and identity management.</p>
+<p><strong>Countermeasures and defense:</strong> Compensating controls matter when patching is not
+immediately possible: isolation, allowlisting, virtual patching through IPS, managed
+access, and tested backups.</p>
+<blockquote>
+<p><strong>EXAM FOCUS:</strong> A flat network has insufficient segmentation. Outbound C2 needs
+egress restriction, not only inbound firewalling. Trap: choosing immediate patching
+without testing when the question stresses a fragile continuous process.</p>
+</blockquote>
+<p><strong>Memory trick:</strong> "Old, Open, Overconnected, Unowned, Unpatched, Unobserved."</p>
+<h3 id="322-mitre-attck-for-ics">3.22 MITRE ATT&amp;CK for ICS</h3>
+<p><strong>What it is:</strong> MITRE ATT&amp;CK for ICS is a knowledge base of adversary tactics, the
+operational goals, and techniques, the ways those goals are achieved.</p>
+<p><strong>Analogy:</strong> Tactics are chapters in an intruder's plan; techniques are the specific
+moves used in each chapter.</p>
+<p><strong>Tactics and examples from the notes:</strong></p>
+<ol>
+<li>Initial access: drive-by compromise, public application or remote-service exploit.</li>
+<li>Execution: change operating mode, CLI, or execution through APIs.</li>
+<li>Persistence: program modification, module firmware, APIs, project-file infection.</li>
+<li>Privilege escalation: software exploitation and hooking.</li>
+<li>Evasion: remove indicators, rootkits, or change operator mode.</li>
+<li>Discovery: network enumeration, sniffing, and remote-system identification.</li>
+<li>Lateral movement: default credentials, program download, and remote services.</li>
+<li>Collection: automated collection, information repositories, and I/O images.</li>
+<li>Command and control: common ports, connection proxy, standard application protocol.</li>
+<li>Inhibit response function: firmware update mode or block command/report messages.</li>
+<li>Impair process control: I/O brute force, parameter alteration, module firmware.</li>
+<li>Impact: property damage, loss of availability, and denial of control.</li>
+</ol>
+<p><strong>Real-world use:</strong> A SOC maps a blocked reporting message to inhibit response function
+and checks whether safety alarms still reach operators.</p>
+<p><strong>Tools and commands used here:</strong> ATT&amp;CK Navigator, logs, network detection, asset
+inventory, and incident-response procedures.</p>
+<p><strong>AI angle (ADDED CONTEXT):</strong> AI can propose ATT&amp;CK mappings from observed events.
+Prompt: "Map these verified ICS events to tactics, cite the event text, and distinguish
+inhibit response function from impair process control."</p>
+<p><strong>Countermeasures and defense:</strong> Use behavior-based detections across several tactics,
+independent safety protections, immutable logs, and rehearsed manual operations.</p>
+<blockquote>
+<p><strong>EXAM FOCUS:</strong> Blocking alarms inhibits response; changing process parameters
+impairs control; damage or denial of control is impact. Trap: treating discovery
+as initial access when the attacker is already inside.</p>
+</blockquote>
+<p><strong>Memory trick:</strong> "Inside Everyone Plants Persistent Evidence; Discovery Leads
+Collection; Control Interrupts Processes Immediately."</p>
+<h3 id="323-ot-threats-hmi-attacks-and-side-channels">3.23 OT threats, HMI attacks, and side channels</h3>
+<p><strong>What it is:</strong> The OT threat list is maintenance/administrative threats, data leakage,
+protocol abuse, destruction of ICS resources, reconnaissance, DoS, HMI attacks,
+enterprise-system/tool exploitation, spear phishing, malware, unpatched
+vulnerabilities, side channels, buffer overflows, and RF remote-controller abuse.</p>
+<p><strong>Analogy:</strong> The HMI is the plant's control-room dashboard. Compromising it can hide
+the real road and send wrong driving instructions.</p>
+<p><strong>How HMI compromise works:</strong> Attackers target the central visualization/control hub
+to damage SCADA devices or steal architecture information. Memory corruption includes
+out-of-bounds read/write and heap/stack buffer overflow. Credential weaknesses include
+hardcoded and cleartext passwords. Cleartext data, insecure defaults, weak
+authentication/authorization, unsafe ActiveX controls, missing encryption, and code
+injection enable further compromise.</p>
+<p><strong>Side-channel methods:</strong> Timing analysis compares authentication time to infer correct
+password characters. Power analysis uses an oscilloscope/measuring probe and analysis
+software to compare power consumption across clock cycles and infer character values.</p>
+<p><strong>Real-world use:</strong> A vendor removes hardcoded HMI credentials and tests patched
+runtime software against malformed project files before plant deployment.</p>
+<p><strong>Tools and commands used here:</strong> Debuggers, fuzzers, oscilloscopes, signal analyzers,
+and HMI/SCADA vulnerability scanners.</p>
+<p><strong>Countermeasures and defense:</strong> Patch HMI software, remove ActiveX dependence, use
+memory-safe development and input validation, unique credentials, MFA at access
+boundaries, constant-time authentication, and power/timing leakage resistance.</p>
+<blockquote>
+<p><strong>EXAM FOCUS:</strong> Buffer overflow is memory corruption; cleartext credential storage
+is credential management. Trap: choosing network sniffing when the evidence is
+oscilloscope power traces.</p>
+</blockquote>
+<p><strong>Memory trick:</strong> "HMI Holds Manipulation and Information"; "Time Tells, Power Paints."</p>
+<h3 id="324-plc-rootkits-evil-plc-rf-controllers-and-supply-chains">3.24 PLC rootkits, Evil PLC, RF controllers, and supply chains</h3>
+<p><strong>What it is:</strong> A PLC rootkit hides in controller execution and manipulates I/O.
+An Evil PLC attack weaponizes a PLC against engineering workstations. Industrial
+RF attacks abuse remote-control transmitters. Supply-chain attacks arrive through
+trusted hardware, software, services, or relationships.</p>
+<p><strong>Analogy:</strong> A rootkit changes the machine's reflexes. Evil PLC turns the machine into
+a trap for its mechanic. Re-pairing replaces the machine's recognized remote.</p>
+<p><strong>PLC rootkit sequence:</strong></p>
+<ol>
+<li>Discover an exposed PLC with Shodan or obtain access through default credentials.</li>
+<li>Gain root/control-flow access and map the physical process plus I/O-pin/logic links.</li>
+<li>Modify I/O initialization, debug registers, and intercept read/write operations.</li>
+<li>Manipulate process integrity and availability while hiding the real state.</li>
+</ol>
+<p><strong>Other methods:</strong> Evil PLC changes PLC configuration/logic through download
+procedures; connected engineering workstations later initiate upload procedures and
+can be attacked, disrupting production. RF replay records and resends commands.
+RF command injection reverse-engineers and alters or creates packets. Malicious
+re-pairing pairs a hostile transmitter. Malicious reprogramming implants controller
+firmware for persistent remote access.</p>
+<p><strong>Supply-chain types:</strong> third-party software compromise, hardware manipulation,
+service-provider breach, malicious-component injection, and exploitation of trusted
+relationships.</p>
+<p><strong>Real-world use:</strong> A plant requires engineering workstations to treat PLC project
+files as untrusted and verifies controller logic against signed known-good versions.</p>
+<p><strong>Tools and commands used here:</strong> Shodan, SDR equipment, debuggers, firmware analysis,
+Metasploit, and modbus-cli.</p>
+<p><strong>Countermeasures and defense:</strong> Restrict programming modes, authenticate project
+downloads, separate engineering workstations, validate logic, protect pairing, sign
+firmware, assess suppliers, and verify received hardware/software.</p>
+<blockquote>
+<p><strong>EXAM FOCUS:</strong> Evil PLC targets the workstation through trusted PLC interactions;
+a PLC rootkit primarily hides and manipulates controller I/O. Trap: choosing replay
+when the attacker creates new RF packets rather than resending captured ones.</p>
+</blockquote>
+<p><strong>Memory trick:</strong> RF methods are "Repeat, Rewrite, Re-pair, Reprogram."</p>
+<h3 id="325-ot-malware-fuxnet-and-related-families">3.25 OT malware: Fuxnet and related families</h3>
+<p><strong>What it is:</strong> OT malware can disrupt industrial operations, destroy data, block
+sensor gateways, or attempt to damage sensors.</p>
+<p><strong>Analogy:</strong> Ordinary ransomware locks the office records; OT destructive malware can
+also interfere with the machinery outside the office.</p>
+<p><strong>How it works:</strong> Fuxnet is described as destructive ICS malware that modifies crucial
+data, prevents access to sensor gateways, and attempts physical sensor damage. The
+notes show deployment-log fragments, a list of sensor-router IPs, <code>xargs</code> parallel
+execution, and JSON inventory containing IPs, a port, and collector/control-room
+objects. Read these as evidence of targeting and deployment, not as a recipe.</p>
+<p><strong>Other listed malware:</strong> Kapeka, Abyss Locker, AvosLocker, COSMICENERGY,
+INDUSTROYER.V2, and Pipedream.</p>
+<blockquote>
+<p><strong>ADDED CONTEXT:</strong> Kapeka is a backdoor; Abyss Locker and AvosLocker are ransomware;
+COSMICENERGY was designed for electric-grid disruption; INDUSTROYER.V2 targets
+industrial communication, notably IEC-104; Pipedream is modular ICS malware.</p>
+</blockquote>
+<p><strong>Real-world use:</strong> A utility prioritizes gateway reachability, immutable historian
+backups, and manual fallback because malware may affect both data and sensor access.</p>
+<p><strong>Tools and commands used here:</strong> EDR/anti-malware, passive ICS monitoring, backup
+and recovery systems, and log analysis.</p>
+<p><strong>Countermeasures and defense:</strong> Segment gateways, restrict engineering changes,
+maintain offline backups, rehearse manual operation, and monitor unauthorized writes
+or firmware activity.</p>
+<blockquote>
+<p><strong>EXAM FOCUS:</strong> Fuxnet is destructive and sensor/gateway focused; Pipedream is a
+modular ICS toolkit. Trap: assuming all listed OT malware is financially motivated
+ransomware.</p>
+</blockquote>
+<p><strong>Memory trick:</strong> "Fuxnet Fouls Field sensors and gateways."</p>
+<h3 id="326-ot-information-gathering-with-shodan-and-cirtnet">3.26 OT information gathering with Shodan and CIRT.net</h3>
+<p><strong>What it is:</strong> Public search can reveal exposed SCADA and vendor products. Default
+password databases reveal vendor-shipped credentials to check and replace.</p>
+<p><strong>Analogy:</strong> Public banners reveal the model of a door; CIRT.net tells you which key
+the manufacturer originally supplied.</p>
+<p><strong>How it works:</strong></p>
+<ol>
+<li>Shodan <code>port:502</code> finds Modbus services; <code>"Schneider Electric"</code> searches a PLC
+   vendor; <code>SCADA country:"US"</code> combines product and geography.</li>
+<li>Results may include IPs, organizations, ports, and service banners. The example
+   also contains FTP response text, proving that Shodan results are not all Modbus.</li>
+<li>CIRT.net lists default passwords for routers, switches, ICS, and other devices,
+   including Siemens SIMATIC WinCC SCADA examples.</li>
+<li>Kamerka-GUI maps exposed devices, SearchDiggity supports search-based discovery,
+   Zeek analyzes network traffic, Criminal IP and ZoomEye provide exposure intelligence.</li>
+</ol>
+<p><strong>Real-world use:</strong> An owner searches only its authorized public range and verifies
+that default WinCC credentials no longer work through a controlled configuration review.</p>
+<p><strong>Tools and commands used here:</strong> Shodan, CIRT.net, Kamerka-GUI, SearchDiggity, Zeek,
+Criminal IP, and ZoomEye.</p>
+<p><strong>Countermeasures and defense:</strong> Remove direct exposure, change defaults at install,
+restrict management access, and monitor for unexpected public services.</p>
+<blockquote>
+<p><strong>EXAM FOCUS:</strong> <code>port:502</code> is a service filter, not proof of a specific PLC vendor.
+CIRT.net is password intelligence; Shodan is internet exposure intelligence.</p>
+</blockquote>
+<p><strong>Memory trick:</strong> "Shodan Shows Systems; CIRT Shows Secrets shipped by default."</p>
+<h3 id="327-ot-protocol-discovery-with-nmap-wireshark-and-malcolm">3.27 OT protocol discovery with Nmap, Wireshark, and Malcolm</h3>
+<p><strong>What it is:</strong> Nmap sends probes and runs scripts. Wireshark decodes packets. Malcolm
+combines network-traffic analysis, Zeek logs, OpenSearch dashboards, and Arkime.</p>
+<p><strong>Analogy:</strong> Nmap knocks cautiously, Wireshark reads one conversation, and Malcolm
+builds an operations dashboard from many conversations.</p>
+<p><strong>How it works:</strong> Slow TCP discovery checks HMI and PLC ports; UDP scripts query
+EtherNet/IP and BACnet. Nmap scripts identify S7, Modbus, Niagara Fox, ProConOS,
+Omron, and PCWorx. Wireshark's Modbus example shows transaction ID, protocol ID,
+length, unit ID, function code Read Input Registers, reference number, and word count.
+Malcolm counts protocols such as Modbus, DNP3, EtherNet/IP, BACnet, and S7comm.</p>
+<blockquote>
+<p><strong>REMEMBER:</strong> Modbus/TCP has no built-in encryption or authentication in its classic
+form. Reading or writing requires only network reachability in many deployments.</p>
+</blockquote>
+<p><strong>Real-world use:</strong> Before any active scan, a team reviews a SPAN capture in Malcolm
+to discover controllers and builds a carefully scoped maintenance-window scan.</p>
+<p><strong>Tools and commands used here:</strong> Nmap NSE scripts, Wireshark, Malcolm, Zeek,
+OpenSearch, and Arkime.</p>
+<p><strong>AI angle (ADDED CONTEXT):</strong> AI can summarize protocol baselines but must not decide
+that active probing is safe. Prompt: "From this approved Malcolm protocol inventory,
+list unexpected cross-zone conversations and propose passive validation only."</p>
+<p><strong>Countermeasures and defense:</strong> Use passive asset discovery, firewall industrial
+ports, allow only required masters, monitor function codes, and test active scripts
+in a lab before production use.</p>
+<blockquote>
+<p><strong>EXAM FOCUS:</strong> <code>enip-info</code> uses UDP 44818; <code>bacnet-info</code> uses UDP 47808;
+<code>modbus-discover</code> uses TCP 502; <code>s7-info</code> uses TCP 102. Trap: running fast parallel
+discovery against fragile controllers when the safest first step is passive capture.</p>
+</blockquote>
+<p><strong>Memory trick:</strong> "Nmap Names, Wireshark Reads, Malcolm Maps."</p>
+<h3 id="328-nessus-fuzzowski-and-skybox">3.28 Nessus, Fuzzowski, and Skybox</h3>
+<p><strong>What it is:</strong> Nessus maps systems to known vulnerabilities. Fuzzowski sends malformed
+or varied protocol inputs to discover errors. Skybox correlates vulnerabilities,
+network paths, exposure, and risk across IT/OT.</p>
+<p><strong>Analogy:</strong> Nessus checks a recall catalog, fuzzing tests unexpected handling, and
+Skybox asks which defective part is both reachable and important.</p>
+<p><strong>Nessus policy steps from the notes:</strong></p>
+<ol>
+<li>Log in, open Policies, create a Basic Network Scan policy.</li>
+<li>Set Discovery port range 0-1000 for the demonstration.</li>
+<li>Check that SCADA plugins are enabled/present, or results cover non-SCADA ports only.</li>
+<li>Save, create a scan from the user-defined policy, enter the target, and launch.</li>
+<li>Review grouped findings such as ICCP/COTP, Modbus/TCP, and EtherNet/IP identity.</li>
+</ol>
+<p><strong>Fuzzing:</strong> BACnet uses UDP 47808, Modbus TCP 502, and IPP TCP 631. Fuzzowski selects
+a protocol fuzzer with <code>-f</code>, transport with <code>-p</code>, requests with <code>-r</code>, receive timeout
+with <code>-rt</code>, monitors with <code>-m</code>, and restart behavior with <code>--restart</code>.</p>
+<p><strong>Real-world use:</strong> A team fuzzes a vendor protocol implementation in an isolated lab,
+then uses Skybox to prioritize the corresponding production exposure without fuzzing
+the live controller.</p>
+<p><strong>Tools and commands used here:</strong> Nessus, Fuzzowski, Skybox, SmartRF Packet Sniffer,
+and Microsoft Defender for IoT.</p>
+<p><strong>Countermeasures and defense:</strong> Require maintenance approval, backups, vendor support,
+and rollback. Prefer passive or credentialed assessment when active probing threatens
+availability.</p>
+<blockquote>
+<p><strong>EXAM FOCUS:</strong> Nessus is vulnerability assessment; Fuzzowski is protocol robustness
+testing; Skybox is exposure/path/risk prioritization. Trap: treating a scan policy
+with no SCADA plugins as proof that no SCADA vulnerabilities exist.</p>
+</blockquote>
+<p><strong>Memory trick:</strong> "Nessus Knows known flaws; Fuzzowski Feeds funny frames; Skybox
+Scores paths."</p>
+<h3 id="329-ics-hardware-analysis-metasploit-modbus-cli-and-dnp3">3.29 ICS hardware analysis, Metasploit, modbus-cli, and DNP3</h3>
+<p><strong>What it is:</strong> Hardware analysis examines chips and their integrated software. Modbus
+tools discover unit IDs and read/write registers or coils. DNP3 exposure can permit
+unauthorized remote access when combined with weak configuration.</p>
+<p><strong>Analogy:</strong> A register is a numbered storage box for a multi-bit value; a coil is a
+one-bit switch. A unit ID identifies which slave device receives the request.</p>
+<p><strong>How it works:</strong></p>
+<ol>
+<li>Static/dynamic chip analysis reveals function arguments, missing I/O validation,
+   certificates, key generation, and encryption information.</li>
+<li>Metasploit's <code>modbus_findunitid</code> probes unit IDs; correct responses identify active
+   stations. <code>modbusclient</code> selects address, count, host, and unit to read registers.</li>
+<li>Install modbus-cli with RubyGems. Read <code>%MW100</code> or <code>400101</code> for registers and
+   <code>%M100</code> or <code>101</code> for coils. Datatypes include word, signed integer, float, dword,
+   and Boolean coil. Save output with <code>--output</code>.</li>
+<li>Shodan searches such as <code>TM221ME16R</code> identify specific Schneider PLC models.</li>
+<li>For DNP3, discover open services and weak/default access, but validate only with
+   explicit approval because writes can change a process.</li>
+</ol>
+<p><strong>Hardware tools:</strong> Software: GDB, OpenOCD, Binwalk, Fritzing, Radare2, Ghidra, IDA
+Pro. Hardware: signal analyzer, multimeter, memory programmer, microcontroller,
+oscilloscope, soldering tools, microscope, JTAG interface, screwdrivers, tweezers,
+and converters.</p>
+<p><strong>Real-world use:</strong> In a testbed, an assessor reads five holding values and demonstrates
+that network access alone exposes process data, then recommends firewall and monitoring
+controls rather than changing live values.</p>
+<p><strong>Tools and commands used here:</strong> Metasploit auxiliary modules, modbus-cli, Shodan,
+Nmap, Binwalk, GDB, OpenOCD, and hardware instruments.</p>
+<p><strong>Countermeasures and defense:</strong> Restrict port 502 and DNP3 port 20000 to authorized
+masters, authenticate remote access externally, log write function codes, segment,
+and require programming-mode authorization.</p>
+<blockquote>
+<p><strong>EXAM FOCUS:</strong> <code>%MW</code> denotes a 16-bit memory word in the shown Schneider syntax;
+<code>%M</code> denotes a coil. <code>400101</code> is a Modbus reference form. Trap: confusing register
+values with one-bit coils or using UDP for classic Modbus TCP.</p>
+</blockquote>
+<p><strong>Memory trick:</strong> "Find the Unit, Set the Host, Read the Register, Mind the Coil."</p>
+<h3 id="330-ot-defenses-purdue-controls-zero-trust-and-organizations">3.30 OT defenses, Purdue controls, zero trust, and organizations</h3>
+<p><strong>What it is:</strong> OT defense is layered risk management that protects operations without
+unsafe testing or uncontrolled change.</p>
+<p><strong>Analogy:</strong> A plant needs gates, visitor logs, trained operators, emergency stops,
+and rehearsals, not just a taller fence.</p>
+<p><strong>Core defenses from the notes:</strong> Purpose-built passive sensors; supported technology
+and tested patches; secure configuration/coding; an asset register; strong changed
+passwords; VPN-backed layered remote access; perimeter filtering; anti-malware;
+unused-service hardening; manufacturer patches; IDS and flow measurement; tested
+third-party web servers; cryptographically signed updates; and periodic audits.</p>
+<p><strong>Vulnerability-to-solution pairs:</strong> Public exposure needs enterprise firewalls,
+managed remote access, MFA, and incident response. Remote connections need strong
+identity, RBAC, and patching. Updates need sandbox testing and hardening. IT/OT
+connections need segregation, an IDMZ, business-based rules, and secure gateways.
+Flat OT needs critical/noncritical separation, zones, defense in depth, and zero trust.
+Wireless needs standard strong encryption. Outbound access needs risk assessment,
+monitoring, segregation, and a separate update repository. Firewalls need secure
+configuration and ACLs. IT and OT should use separate username conventions.</p>
+<p><strong>Purdue security controls:</strong> Levels 4/5 use firewalls, IPS, anti-bot, URL filtering,
+SSL inspection, antivirus, and DLP. Level 3.5 uses anti-DoS, IPS, anti-bot,
+application control, and application-layer firewalling. Level 3 adds sandboxing,
+traffic encryption, monitoring, and USB/port protection. Levels 1/2 use IPS,
+firewalls, IPsec, security gateways, and authorized RTU/PLC commands. Level 0 adds
+point-to-point controls, MAC authentication, and additional gateways at Levels 0/1.</p>
+<p><strong>Zero-trust sequence:</strong> Define the network, map traffic, architect the network,
+develop the zero-trust policy, then monitor and maintain. Verify users, applications,
+and devices continuously and grant only required access.</p>
+<p><strong>Organizations:</strong> OTCC shares best practices among industry and government. OT-ISAC
+supports operational-technology threat information sharing. NERC develops and enforces
+electric reliability standards in its jurisdiction.</p>
+<blockquote>
+<p><strong>EXAM FOCUS:</strong> Zero trust is not one appliance. It is identity, least privilege,
+segmentation, and continuous validation. Trap: allowing a vendor permanent broad
+access because the vendor is trusted.</p>
+</blockquote>
+<p><strong>Memory trick:</strong> Zero trust: "Define, Draw, Design, Decide, Detect."</p>
+<h2 id="4-tool-encyclopedia">4. Tool Encyclopedia</h2>
+<h3 id="41-exposure-search-and-information-gathering">4.1 Exposure search and information gathering</h3>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Simple purpose</th>
+<th>Type</th>
+<th>Phase</th>
+<th>Exam keyword</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Shodan</td>
+<td>Find exposed service banners</td>
+<td>Web search</td>
+<td>Recon</td>
+<td>Internet-connected PLC</td>
+</tr>
+<tr>
+<td>Censys</td>
+<td>Search internet assets</td>
+<td>Web search</td>
+<td>Recon</td>
+<td>Alternative to Shodan</td>
+</tr>
+<tr>
+<td>FOFA</td>
+<td>Search cyberspace assets</td>
+<td>Web search</td>
+<td>Recon</td>
+<td>Exposure mapping</td>
+</tr>
+<tr>
+<td>ZoomEye</td>
+<td>Search exposed devices</td>
+<td>Web search</td>
+<td>Recon</td>
+<td>CamOver API option</td>
+</tr>
+<tr>
+<td>Criminal IP</td>
+<td>Assess IP exposure</td>
+<td>Web intelligence</td>
+<td>Recon</td>
+<td>IP risk intelligence</td>
+</tr>
+<tr>
+<td>MultiPing</td>
+<td>Monitor many hosts</td>
+<td>Network utility</td>
+<td>Discovery</td>
+<td>Multiple-host latency</td>
+</tr>
+<tr>
+<td>FCC ID Search</td>
+<td>Identify radio approval data</td>
+<td>Public database</td>
+<td>Recon</td>
+<td>Find RF frequency</td>
+</tr>
+<tr>
+<td>CIRT.net</td>
+<td>Find factory passwords</td>
+<td>Password database</td>
+<td>Recon</td>
+<td>Default WinCC password</td>
+</tr>
+<tr>
+<td>Kamerka-GUI</td>
+<td>Map exposed devices</td>
+<td>OSINT GUI</td>
+<td>Recon</td>
+<td>Geolocation and ICS</td>
+</tr>
+<tr>
+<td>SearchDiggity</td>
+<td>Query exposed resources</td>
+<td>OSINT suite</td>
+<td>Recon</td>
+<td>Search-engine dorks</td>
+</tr>
+<tr>
+<td>Zeek</td>
+<td>Produce network logs</td>
+<td>NSM engine</td>
+<td>Monitoring</td>
+<td>Connection and protocol logs</td>
+</tr>
+<tr>
+<td>iRidium</td>
+<td>Visualize control systems</td>
+<td>HMI/ICS software</td>
+<td>Target example</td>
+<td>HVAC control panel</td>
+</tr>
+</tbody>
+</table>
+<h3 id="42-discovery-scanning-analysis-and-prioritization">4.2 Discovery, scanning, analysis, and prioritization</h3>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Simple purpose</th>
+<th>Type</th>
+<th>Phase</th>
+<th>Exam keyword</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nmap</td>
+<td>Discover ports and services</td>
+<td>Active scanner</td>
+<td>Scanning</td>
+<td>NSE <code>s7-info</code></td>
+</tr>
+<tr>
+<td>Wireshark</td>
+<td>Decode captured packets</td>
+<td>Protocol analyzer</td>
+<td>Analysis</td>
+<td>Modbus function code</td>
+</tr>
+<tr>
+<td>Malcolm</td>
+<td>Analyze ICS network traffic</td>
+<td>NSM platform</td>
+<td>Discovery</td>
+<td>OpenSearch and Arkime</td>
+</tr>
+<tr>
+<td>Arkime</td>
+<td>Index and search packets</td>
+<td>Packet interface</td>
+<td>Analysis</td>
+<td>Malcolm packet view</td>
+</tr>
+<tr>
+<td>OpenSearch</td>
+<td>Search and visualize logs</td>
+<td>Dashboard</td>
+<td>Analysis</td>
+<td>Malcolm dashboards</td>
+</tr>
+<tr>
+<td>Nessus</td>
+<td>Find known vulnerabilities</td>
+<td>Vulnerability scanner</td>
+<td>Assessment</td>
+<td>SCADA plugins</td>
+</tr>
+<tr>
+<td>IoTSeeker</td>
+<td>Check default IoT passwords</td>
+<td>Perl scanner</td>
+<td>Assessment</td>
+<td>Camera default passwd</td>
+</tr>
+<tr>
+<td>Genzai</td>
+<td>Identify IoT flaws</td>
+<td>IoT toolkit</td>
+<td>Assessment</td>
+<td>Paths and versions</td>
+</tr>
+<tr>
+<td>beSTORM</td>
+<td>Fuzz and test software</td>
+<td>Security tester</td>
+<td>Assessment</td>
+<td>Protocol robustness</td>
+</tr>
+<tr>
+<td>IoTSploit</td>
+<td>Test IoT targets</td>
+<td>Exploitation suite</td>
+<td>Assessment</td>
+<td>IoT framework</td>
+</tr>
+<tr>
+<td>IoTVAS</td>
+<td>Assess IoT firmware</td>
+<td>Analysis platform</td>
+<td>Assessment</td>
+<td>Firmware risk</td>
+</tr>
+<tr>
+<td>Firmalyzer</td>
+<td>Analyze firmware</td>
+<td>Firmware platform</td>
+<td>Assessment</td>
+<td>Firmware components</td>
+</tr>
+<tr>
+<td>Skybox</td>
+<td>Prioritize exposed risk</td>
+<td>Risk/path analysis</td>
+<td>Assessment</td>
+<td>Combined IT/OT paths</td>
+</tr>
+<tr>
+<td>Defender for IoT</td>
+<td>Monitor IoT/OT assets</td>
+<td>Security platform</td>
+<td>Defense</td>
+<td>Passive asset visibility</td>
+</tr>
+<tr>
+<td>SmartRF Sniffer</td>
+<td>Capture TI radio packets</td>
+<td>RF analyzer</td>
+<td>Analysis</td>
+<td>TI wireless protocols</td>
+</tr>
+</tbody>
+</table>
+<h3 id="43-radio-hardware-and-exploitation-tools">4.3 Radio, hardware, and exploitation tools</h3>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Simple purpose</th>
+<th>Type</th>
+<th>Phase</th>
+<th>Exam keyword</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RFCrack</td>
+<td>Test sub-GHz signals</td>
+<td>Python SDR tool</td>
+<td>Attack test</td>
+<td>Rolling code <code>-r</code></td>
+</tr>
+<tr>
+<td>YardStick One</td>
+<td>Send/receive sub-GHz RF</td>
+<td>USB radio</td>
+<td>Attack test</td>
+<td>RFCrack hardware</td>
+</tr>
+<tr>
+<td>HackRF One</td>
+<td>Capture/transmit wideband RF</td>
+<td>Half-duplex SDR</td>
+<td>Attack test</td>
+<td>1 MHz to 6 GHz</td>
+</tr>
+<tr>
+<td>RTL-SDR</td>
+<td>Receive radio spectrum</td>
+<td>Low-cost SDR</td>
+<td>Recon</td>
+<td>Find nearby frequency</td>
+</tr>
+<tr>
+<td>Open Sniffer</td>
+<td>Capture/send 802.15.4</td>
+<td>Zigbee sniffer</td>
+<td>Attack test</td>
+<td>Replay Zigbee frames</td>
+</tr>
+<tr>
+<td>CatSniffer</td>
+<td>Passively monitor IoT RF</td>
+<td>Multi-protocol tool</td>
+<td>Recon</td>
+<td>CC1352 traffic</td>
+</tr>
+<tr>
+<td>KillerBee</td>
+<td>Assess Zigbee networks</td>
+<td>Python/RF framework</td>
+<td>Attack test</td>
+<td>802.15.4 security</td>
+</tr>
+<tr>
+<td>Suphacap</td>
+<td>Capture wireless traffic</td>
+<td>Sniffer</td>
+<td>Analysis</td>
+<td>Listed IoT sniffer</td>
+</tr>
+<tr>
+<td>BUS Auditor</td>
+<td>Find UART/I2C/JTAG pins</td>
+<td>Hardware scanner</td>
+<td>Recon</td>
+<td>RX TX and baud</td>
+</tr>
+<tr>
+<td>DIVA</td>
+<td>Practice hardware security</td>
+<td>Training target</td>
+<td>Lab</td>
+<td>Insecure board app</td>
+</tr>
+<tr>
+<td>JAGulator</td>
+<td>Identify JTAG pinout</td>
+<td>Hardware tool</td>
+<td>Recon</td>
+<td>JTAG pin discovery</td>
+</tr>
+<tr>
+<td>CamOver</td>
+<td>Test camera disclosure</td>
+<td>Exploit tool</td>
+<td>Gaining access</td>
+<td><code>-a</code> camera IP</td>
+</tr>
+<tr>
+<td>RouterSploit</td>
+<td>Test embedded devices</td>
+<td>Exploit framework</td>
+<td>Gaining access</td>
+<td>Router exploits</td>
+</tr>
+<tr>
+<td>PENIOT</td>
+<td>Test IoT device security</td>
+<td>Pentest framework</td>
+<td>Assessment</td>
+<td>IoT penetration</td>
+</tr>
+<tr>
+<td>wiz_exploit</td>
+<td>Test listed IoT issues</td>
+<td>Exploit project</td>
+<td>Gaining access</td>
+<td>Notes tool list</td>
+</tr>
+<tr>
+<td>Metasploit</td>
+<td>Run security modules</td>
+<td>Exploit framework</td>
+<td>Assessment</td>
+<td><code>modbus_findunitid</code></td>
+</tr>
+<tr>
+<td>modbus-cli</td>
+<td>Read/write Modbus data</td>
+<td>Ruby CLI</td>
+<td>Assessment</td>
+<td><code>%MW100</code> register</td>
+</tr>
+<tr>
+<td>Fuzzowski</td>
+<td>Fuzz network protocols</td>
+<td>Python fuzzer</td>
+<td>Assessment</td>
+<td><code>-f</code> and <code>--restart</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="44-firmware-and-reverse-engineering-tools">4.4 Firmware and reverse-engineering tools</h3>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Simple purpose</th>
+<th>Type</th>
+<th>Phase</th>
+<th>Exam keyword</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Firmware Mod Kit</td>
+<td>Extract/rebuild firmware</td>
+<td>Firmware toolkit</td>
+<td>Maintain access</td>
+<td><code>extract-firmware.sh</code></td>
+</tr>
+<tr>
+<td>Binwalk</td>
+<td>Identify/extract images</td>
+<td>Firmware analyzer</td>
+<td>Analysis</td>
+<td>Embedded Squashfs</td>
+</tr>
+<tr>
+<td>Redress</td>
+<td>Inspect Go binaries</td>
+<td>Reverse tool</td>
+<td>Malware analysis</td>
+<td>Go source functions</td>
+</tr>
+<tr>
+<td>GDB</td>
+<td>Debug program execution</td>
+<td>Debugger</td>
+<td>Analysis</td>
+<td>Execution flow</td>
+</tr>
+<tr>
+<td>OpenOCD</td>
+<td>Drive debug hardware</td>
+<td>Debug server</td>
+<td>Analysis</td>
+<td>JTAG debugging</td>
+</tr>
+<tr>
+<td>Fritzing</td>
+<td>Document circuit layouts</td>
+<td>Electronics design</td>
+<td>Analysis</td>
+<td>PCB prototyping</td>
+</tr>
+<tr>
+<td>Radare2</td>
+<td>Reverse binaries</td>
+<td>RE framework</td>
+<td>Analysis</td>
+<td>Disassembly</td>
+</tr>
+<tr>
+<td>Ghidra</td>
+<td>Decompile and analyze</td>
+<td>RE suite</td>
+<td>Analysis</td>
+<td>NSA reverse suite</td>
+</tr>
+<tr>
+<td>IDA Pro</td>
+<td>Disassemble/decompile</td>
+<td>Commercial RE</td>
+<td>Analysis</td>
+<td>Static binary review</td>
+</tr>
+<tr>
+<td>QEMU</td>
+<td>Emulate processor/system</td>
+<td>Emulator</td>
+<td>Dynamic analysis</td>
+<td><code>qemu-mipsel</code></td>
+</tr>
+<tr>
+<td>Signal analyzer</td>
+<td>Measure electronic signals</td>
+<td>Instrument</td>
+<td>Hardware analysis</td>
+<td>Chip behavior</td>
+</tr>
+<tr>
+<td>Oscilloscope</td>
+<td>Display voltage over time</td>
+<td>Instrument</td>
+<td>Side channel</td>
+<td>Power trace</td>
+</tr>
+<tr>
+<td>Multimeter</td>
+<td>Measure electrical values</td>
+<td>Instrument</td>
+<td>Hardware recon</td>
+<td>Ground pin and voltage</td>
+</tr>
+</tbody>
+</table>
+<h3 id="45-device-management-and-security-products">4.5 Device management and security products</h3>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Simple purpose</th>
+<th>Type</th>
+<th>Main use</th>
+<th>Exam keyword</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SeaCat.io</td>
+<td>Manage connected devices</td>
+<td>IoT platform</td>
+<td>Operations</td>
+<td>Secure device access</td>
+</tr>
+<tr>
+<td>Armis Centrix</td>
+<td>Discover and manage assets</td>
+<td>Asset security</td>
+<td>Visibility</td>
+<td>Agentless IoT/OT assets</td>
+</tr>
+<tr>
+<td>Oracle Fusion IoT</td>
+<td>Manage IoT fleet/data</td>
+<td>Cloud platform</td>
+<td>Management</td>
+<td>Oracle IoT</td>
+</tr>
+<tr>
+<td>Golioth</td>
+<td>Manage embedded fleets</td>
+<td>Cloud platform</td>
+<td>Management</td>
+<td>Firmware and devices</td>
+</tr>
+<tr>
+<td>AWS IoT Device Mgmt</td>
+<td>Onboard and update devices</td>
+<td>Cloud platform</td>
+<td>Management</td>
+<td>AWS fleet jobs</td>
+</tr>
+<tr>
+<td>IBM Watson IoT</td>
+<td>Connect and analyze devices</td>
+<td>Cloud platform</td>
+<td>Management</td>
+<td>IBM IoT Platform</td>
+</tr>
+<tr>
+<td>openBalena</td>
+<td>Deploy/manage device fleets</td>
+<td>Open platform</td>
+<td>Management</td>
+<td>Balena self-hosted</td>
+</tr>
+<tr>
+<td>Azure IoT Central</td>
+<td>Operate IoT applications</td>
+<td>Cloud platform</td>
+<td>Management</td>
+<td>Azure dashboard</td>
+</tr>
+</tbody>
+</table>
+<h2 id="5-command-sheet">5. Command Sheet</h2>
+<p>All examples are for systems you own or are explicitly authorized to assess. Sample
+outputs are simplified teaching examples. IPs are private/documentation values.</p>
+<h3 id="51-shodan-filters-and-http-discovery-with-nmap">5.1 Shodan filters and HTTP discovery with Nmap</h3>
+<p><strong>Purpose:</strong> Locate candidate exposed devices, then identify selected web ports in an
+authorized scope.</p>
+<pre><code class="language-text">webcamxp country:&quot;US&quot;
+webcamxp city:&quot;paris&quot;
+webcamxp geo:&quot;-50.81,201.80&quot;
+port:502
+&quot;Schneider Electric&quot;
+SCADA country:&quot;US&quot;
+TM221ME16R
+</code></pre>
+<pre><code class="language-bash">nmap -p 80,81,8080,8081 192.168.10.0/24
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Part</th>
+<th>Meaning</th>
+<th>When used</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-p</code></td>
+<td>Select ports</td>
+<td>Known web alternatives</td>
+<td><code>-p 80,8080</code></td>
+</tr>
+<tr>
+<td>target</td>
+<td>IP, host, or range</td>
+<td>Authorized scope only</td>
+<td><code>192.168.10.20</code></td>
+</tr>
+<tr>
+<td><code>country:</code></td>
+<td>Shodan country filter</td>
+<td>Geographic exposure</td>
+<td><code>country:"US"</code></td>
+</tr>
+<tr>
+<td><code>port:</code></td>
+<td>Shodan service port</td>
+<td>Find Modbus candidates</td>
+<td><code>port:502</code></td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-text">PORT     STATE  SERVICE
+80/tcp   open   http
+81/tcp   closed unknown
+8080/tcp open   http-proxy
+8081/tcp closed blackice-icecap
+</code></pre>
+<p>Open means a service accepted the probe; closed means reachable but no listener on
+that port. The service label is a guess based on port/probe, not proof of device type.
+Mistakes include using uppercase <code>-P</code> for ports and assuming 8080 proves a camera.
+The exam asks you to distinguish Nmap active scanning from Shodan indexed results.</p>
+<h3 id="52-ifconfig-airmon-ng-airodump-ng-and-wireshark">5.2 ifconfig, Airmon-ng, Airodump-ng, and Wireshark</h3>
+<p><strong>Purpose:</strong> Identify a wireless adapter, enable monitor mode, discover networks,
+and capture one channel.</p>
+<pre><code class="language-bash">ifconfig
+airmon-ng start wlan0
+airodump-ng wlan0mon
+airmon-ng start wlan0mon 11
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Command/part</th>
+<th>Meaning</th>
+<th>When used</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ifconfig</code></td>
+<td>Show interface configuration</td>
+<td>Find adapter name</td>
+<td><code>wlan0</code></td>
+</tr>
+<tr>
+<td><code>start</code></td>
+<td>Enable monitor mode</td>
+<td>Before capture</td>
+<td><code>airmon-ng start wlan0</code></td>
+</tr>
+<tr>
+<td><code>wlan0mon</code></td>
+<td>Monitor interface</td>
+<td>Airodump/Wireshark source</td>
+<td>Capture target</td>
+</tr>
+<tr>
+<td><code>11</code></td>
+<td>Lock channel 11</td>
+<td>Match target network</td>
+<td>Last argument above</td>
+</tr>
+</tbody>
+</table>
+<p>[UNCLEAR on page 11] The transcription shows <code>airodump-ng start wlan0mon</code>; the
+best reading is <code>airodump-ng wlan0mon</code>, because Airodump-ng does not need Airmon's
+<code>start</code> subcommand. It also shows <code>nmap -P</code>; standard Nmap port selection is <code>-p</code>.</p>
+<pre><code class="language-text">CH 11  BSSID  AA:BB:CC:DD:EE:FF  PWR -42  ESSID LabSensors
+MQTT Ping Request
+MQTT Publish Message
+TCP dst port 1883
+</code></pre>
+<p>Read BSSID as the access-point radio MAC and ESSID as network name. MQTT keepalive
+and publish packets at 1883 suggest plaintext MQTT. Common mistakes are capturing
+the wrong channel, choosing the non-monitor interface, and treating a protocol name
+as proof of readable payload. The exam tests <code>airmon-ng</code> versus <code>airodump-ng</code>.</p>
+<h3 id="53-iotseeker">5.3 IoTSeeker</h3>
+<p><strong>Purpose:</strong> Check listed devices for factory credentials.</p>
+<pre><code class="language-bash">perl IotScanner.pl 192.168.10.31,192.168.10.43,192.168.10.53
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Part</th>
+<th>Meaning</th>
+<th>When used</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>perl</code></td>
+<td>Run Perl interpreter</td>
+<td>Script has no wrapper</td>
+<td>First token</td>
+</tr>
+<tr>
+<td><code>IotScanner.pl</code></td>
+<td>IoTSeeker scanner</td>
+<td>Authorized device list</td>
+<td>Script name</td>
+</tr>
+<tr>
+<td>comma list</td>
+<td>Targets to test</td>
+<td>Known addresses</td>
+<td>No spaces shown</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-text">device 192.168.10.31 is of type Arecont has changed passwd
+device 192.168.10.43 is of type W-Box still has default passwd
+</code></pre>
+<p>The first host does not retain its factory password; the second is high priority.
+Vendor names identify detected device types. Mistakes include scanning a whole
+internet list and treating a changed password as proof of strength. Exam keyword:
+"default, factory-set credentials" points to IoTSeeker.</p>
+<h3 id="54-rfcrack">5.4 RFCrack</h3>
+<p><strong>Purpose:</strong> Test live replay, rolling-code behavior, RSSI filtering, and jamming on
+owned sub-GHz equipment.</p>
+<pre><code class="language-bash">python RFCrack.py -i
+python RFCrack.py -r -M MOD_2FSK -F 314350000
+python RFCrack.py -r -M MOD_2FSK -F 314350000 -U -100 -L -10
+python RFCrack.py -j -F 314000000
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Meaning</th>
+<th>When used</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-i</code></td>
+<td>Live replay mode</td>
+<td>Immediate capture/replay</td>
+<td><code>RFCrack.py -i</code></td>
+</tr>
+<tr>
+<td><code>-r</code></td>
+<td>Rolling-code mode</td>
+<td>Test jam/capture sequence</td>
+<td>With <code>-M</code> and <code>-F</code></td>
+</tr>
+<tr>
+<td><code>-M</code></td>
+<td>Modulation</td>
+<td>Match target signal</td>
+<td><code>MOD_2FSK</code></td>
+</tr>
+<tr>
+<td><code>-F</code></td>
+<td>Frequency in Hz</td>
+<td>Match transmitter</td>
+<td><code>314350000</code></td>
+</tr>
+<tr>
+<td><code>-U</code></td>
+<td>Upper RSSI bound</td>
+<td>Filter captured signals</td>
+<td><code>-100</code></td>
+</tr>
+<tr>
+<td><code>-L</code></td>
+<td>Lower RSSI bound</td>
+<td>Filter captured signals</td>
+<td><code>-10</code></td>
+</tr>
+<tr>
+<td><code>-j</code></td>
+<td>Jamming mode</td>
+<td>Controlled RF lab only</td>
+<td>With frequency</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-text">Welcome to RFCrack - A Software Defined Radio Attack Tool
+Release: 1.4
+Hardware Needed: 1 YardStick or 2 for RollingCode
+</code></pre>
+<p>The banner identifies the tool/version and warns that rolling-code testing can need
+two radios. Do not confuse 314350000 Hz with 314.35 MHz notation. The notes' exact
+RSSI bound semantics are tool-specific; remember the values as shown. Common errors
+are choosing <code>-i</code> for rolling code or omitting modulation. The exam commonly asks
+which flag performs jamming or rolling-code mode.</p>
+<h3 id="55-hackrf-transfer-and-device-information">5.5 HackRF transfer and device information</h3>
+<p><strong>Purpose:</strong> Capture raw quadrature radio samples, replay them, and identify hardware.</p>
+<pre><code class="language-bash">hackrf_transfer -r capture.raw -f 433900000 -l 20 -g 20
+hackrf_transfer -t capture.raw -f 433900000 -x 40
+hackrf_info
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Meaning</th>
+<th>When used</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-r</code></td>
+<td>Receive to file</td>
+<td>Capture signal</td>
+<td><code>-r capture.raw</code></td>
+</tr>
+<tr>
+<td><code>-t</code></td>
+<td>Transmit from file</td>
+<td>Replay owned signal</td>
+<td><code>-t capture.raw</code></td>
+</tr>
+<tr>
+<td><code>-f</code></td>
+<td>Center frequency Hz</td>
+<td>Tune radio</td>
+<td><code>433900000</code></td>
+</tr>
+<tr>
+<td><code>-l</code></td>
+<td>RX LNA gain dB</td>
+<td>Adjust RF input gain</td>
+<td><code>20</code></td>
+</tr>
+<tr>
+<td><code>-g</code></td>
+<td>RX VGA gain dB</td>
+<td>Adjust baseband gain</td>
+<td><code>20</code></td>
+</tr>
+<tr>
+<td><code>-x</code></td>
+<td>TX VGA gain dB</td>
+<td>Adjust transmit gain</td>
+<td><code>40</code></td>
+</tr>
+<tr>
+<td><code>-s</code></td>
+<td>Sample rate Hz</td>
+<td>Set capture bandwidth</td>
+<td><code>10000000</code></td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-text">call hackrf_set_freq(433900000 Hz/433.900 MHz)
+19.9 MiB / 1.000 sec = 19.9 MiB/second
+Board ID Number: 2 (HackRF One)
+Firmware Version: 2015.07.2
+</code></pre>
+<p>Frequency confirms tuning, throughput confirms streaming, and info identifies board
+and firmware. The source capture's filenames are blurry; <code>capture.raw</code> here is a clear
+teaching substitute. LNA gain must fit device increments. Never transmit outside
+authorized frequencies/labs. Exam focus: <code>-r</code> receives, <code>-t</code> transmits, <code>-f</code> tunes.</p>
+<h3 id="56-bus-auditor-uart-and-i2c-scans">5.6 BUS Auditor UART and I2C scans</h3>
+<p><strong>Purpose:</strong> Identify hardware pins and communication settings.</p>
+<pre><code class="language-bash">run busauditor.generic.uartscan -v 3.3 -p /dev/ttyACM0
+run busauditor.generic.i2cscan -v 3.3 -p /dev/ttyACM0 -s 0 -e 10
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Part</th>
+<th>Meaning</th>
+<th>When used</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>uartscan</code></td>
+<td>Search UART combinations</td>
+<td>Find console pins</td>
+<td>Generic module</td>
+</tr>
+<tr>
+<td><code>i2cscan</code></td>
+<td>Search I2C combinations</td>
+<td>Find device/address</td>
+<td>Generic module</td>
+</tr>
+<tr>
+<td><code>-v</code></td>
+<td>Target voltage</td>
+<td>Match board logic</td>
+<td><code>3.3</code></td>
+</tr>
+<tr>
+<td><code>-p</code></td>
+<td>Serial device</td>
+<td>Connect BUS Auditor</td>
+<td><code>/dev/ttyACM0</code></td>
+</tr>
+<tr>
+<td><code>-s</code></td>
+<td>Start pin</td>
+<td>Limit scan range</td>
+<td><code>0</code></td>
+</tr>
+<tr>
+<td><code>-e</code></td>
+<td>End pin</td>
+<td>Limit scan range</td>
+<td><code>10</code></td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-text">UART Scan Result: RX pin 1, TX pin 0, BaudRate 9600
+I2C Scan Result: Device Address 0x48, SCL 1, SDA 0
+</code></pre>
+<p>RX/TX are receive/transmit, baud is serial speed, 0x48 is a hexadecimal device address,
+SCL is clock, and SDA is data. Wrong voltage can damage equipment. The exam asks
+which interface uses SCL/SDA and which scan finds baud rate.</p>
+<h3 id="57-camover">5.7 CamOver</h3>
+<p><strong>Purpose:</strong> Test susceptible network cameras for administrative password disclosure.</p>
+<pre><code class="language-bash">camover
+camover -a 192.168.10.50
+camover -t --shodan SHODAN_API_KEY
+camover -i addresses.txt -o results.txt
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Meaning</th>
+<th>When used</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-h</code></td>
+<td>Show help</td>
+<td>Review options</td>
+<td><code>camover -h</code></td>
+</tr>
+<tr>
+<td><code>-t</code></td>
+<td>Use threads</td>
+<td>Faster approved tests</td>
+<td>With input/API</td>
+</tr>
+<tr>
+<td><code>-o</code></td>
+<td>Output result file</td>
+<td>Preserve evidence</td>
+<td><code>-o results.txt</code></td>
+</tr>
+<tr>
+<td><code>-i</code></td>
+<td>Input address file</td>
+<td>Multiple owned targets</td>
+<td><code>-i addresses.txt</code></td>
+</tr>
+<tr>
+<td><code>-a</code></td>
+<td>Single address</td>
+<td>One camera</td>
+<td><code>-a 192.168.10.50</code></td>
+</tr>
+<tr>
+<td><code>--shodan</code></td>
+<td>Shodan API key</td>
+<td>Internet research scope</td>
+<td>Do not expose key</td>
+</tr>
+<tr>
+<td><code>--zoomeye</code></td>
+<td>ZoomEye API key</td>
+<td>Alternate search</td>
+<td>Do not expose key</td>
+</tr>
+<tr>
+<td><code>-p</code></td>
+<td>ZoomEye pages</td>
+<td>Limit result pages</td>
+<td><code>-p 1</code></td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-text">CamOver is a camera exploitation tool
+usage: camover [-h] [-t] [-o OUTPUT] [-i INPUT] [-a ADDRESS]
+</code></pre>
+<p>Help confirms that <code>-a</code> is one address and <code>-t</code> is threading. Real output depends on
+camera vulnerability; no response is not proof of security. Common mistakes are using
+<code>-t</code> as target and placing an API key in shared notes. The exam tests tool selection
+and <code>-a</code> for one IP.</p>
+<h3 id="58-firmware-mod-kit-extraction">5.8 Firmware Mod Kit extraction</h3>
+<p><strong>Purpose:</strong> Deconstruct a firmware image for static review and controlled rebuilding.</p>
+<pre><code class="language-bash">./extract-firmware.sh dd-wrt.v24_micro_generic.bin
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Part</th>
+<th>Meaning</th>
+<th>When used</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>./</code></td>
+<td>Run in current directory</td>
+<td>Script is not on PATH</td>
+<td>Before script</td>
+</tr>
+<tr>
+<td>script</td>
+<td>FMK extraction routine</td>
+<td>Known firmware image</td>
+<td><code>extract-firmware.sh</code></td>
+</tr>
+<tr>
+<td>argument</td>
+<td>Input image</td>
+<td>Vendor/owned firmware</td>
+<td><code>.bin</code> file</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-text">0x0     TRX firmware header, little endian
+0x1C    gzip compressed data
+0x9A8   LZMA compressed data
+70728   Squashfs filesystem, little endian
+Extracting squashfs file system at offset 670720
+</code></pre>
+<p>Offsets show where components begin; compression identifies storage encoding;
+Squashfs contains the embedded filesystem. An MD5 checksum identifies the analyzed
+image but is not a trusted signature. Mistakes include modifying the only original
+and assuming successful extraction means successful repacking/boot. Exam focus:
+FMK deconstructs and reconstructs firmware.</p>
+<h3 id="59-static-firmware-commands-and-qemu-emulation">5.9 Static firmware commands and QEMU emulation</h3>
+<p><strong>Purpose:</strong> Inspect, extract, mount, search, and emulate firmware.</p>
+<pre><code class="language-bash">file firmware.bin
+md5sum firmware.bin
+strings firmware.bin
+hexdump firmware.bin
+binwalk firmware.bin
+dd if=firmware.bin of=rootfs.img bs=1 skip=670720
+mkdir rootfs
+sudo mount -t ext2 rootfs.img rootfs
+grep -rnw rootfs -e password
+find rootfs -name &quot;*.conf&quot;
+qemu-mipsel -L rootfs ./binary
+qemu-arm -L rootfs ./binary
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Command/flag</th>
+<th>Meaning</th>
+<th>When used</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>file</code></td>
+<td>Identify file type</td>
+<td>First triage</td>
+<td><code>.bin</code> input</td>
+</tr>
+<tr>
+<td><code>md5sum</code></td>
+<td>Calculate MD5 digest</td>
+<td>Match known image</td>
+<td>Not a signature</td>
+</tr>
+<tr>
+<td><code>strings</code></td>
+<td>Show printable text</td>
+<td>Find clues/secrets</td>
+<td>Firmware image</td>
+</tr>
+<tr>
+<td><code>hexdump</code></td>
+<td>Show raw bytes</td>
+<td>Inspect header</td>
+<td>Firmware image</td>
+</tr>
+<tr>
+<td><code>binwalk</code></td>
+<td>Identify embedded data</td>
+<td>Find filesystems</td>
+<td>Firmware image</td>
+</tr>
+<tr>
+<td><code>if=</code></td>
+<td>dd input file</td>
+<td>Select source</td>
+<td><code>if=firmware.bin</code></td>
+</tr>
+<tr>
+<td><code>of=</code></td>
+<td>dd output file</td>
+<td>Save carved data</td>
+<td><code>of=rootfs.img</code></td>
+</tr>
+<tr>
+<td><code>bs=</code></td>
+<td>dd block size</td>
+<td>Byte-accurate copy</td>
+<td><code>bs=1</code></td>
+</tr>
+<tr>
+<td><code>skip=</code></td>
+<td>Skip input blocks</td>
+<td>Start at offset</td>
+<td><code>skip=670720</code></td>
+</tr>
+<tr>
+<td><code>-t ext2</code></td>
+<td>Filesystem type</td>
+<td>Mount extracted image</td>
+<td>Mount command</td>
+</tr>
+<tr>
+<td><code>-rnw</code></td>
+<td>Recursive, line, word grep</td>
+<td>Locate exact term</td>
+<td>Password search</td>
+</tr>
+<tr>
+<td><code>-e</code></td>
+<td>grep pattern</td>
+<td>Supply search term</td>
+<td><code>-e password</code></td>
+</tr>
+<tr>
+<td><code>-name</code></td>
+<td>Match filename</td>
+<td>Find config/cert files</td>
+<td><code>"*.conf"</code></td>
+</tr>
+<tr>
+<td><code>-L</code></td>
+<td>QEMU library prefix</td>
+<td>Match guest rootfs</td>
+<td><code>-L rootfs</code></td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-text">firmware.bin: data
+0x9A8: LZMA compressed data
+rootfs/etc/passwd
+rootfs/etc/shadow
+</code></pre>
+<p><code>file: data</code> means no specific known type was identified; Binwalk can still recognize
+embedded regions. Password/shadow paths reveal account files, not automatically valid
+credentials. Use <code>qemu-&lt;architecture&gt;</code> matching the binary; <code>mipsel</code> is little-endian
+MIPS. Mistakes include wrong offsets, wrong architecture, mounting untrusted images
+without isolation, and using MD5 as proof of authenticity.</p>
+<h3 id="510-nmap-industrial-protocol-scripts">5.10 Nmap industrial-protocol scripts</h3>
+<p><strong>Purpose:</strong> Identify specific OT services with cautious, selected probes.</p>
+<pre><code class="language-bash">nmap -Pn -sT --scan-delay 1s --max-parallelism 1 \
+  -p 502 192.168.20.10
+nmap -Pn -sU -p 44818 --script enip-info 192.168.20.10
+nmap -Pn -sT -p 46824 192.168.20.20
+nmap -Pn -sT -p 1911,4911 --script fox-info 192.168.20.30
+nmap -Pn -sT -p 102 --script=s7-info 192.168.20.40
+nmap -Pn -sT -p 20547 --script proconos-info 192.168.20.50
+nmap -Pn -sT -p 502 --script modbus-discover 192.168.20.60
+nmap -Pn -sT -p 9600 --script omron-info 192.168.20.70
+nmap -Pn -sU -p 47808 --script bacnet-info 192.168.20.80
+nmap -Pn -sT -p 1962 --script pcworx-info 192.168.20.90
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Meaning</th>
+<th>When used</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-Pn</code></td>
+<td>Skip host discovery</td>
+<td>Device blocks ping</td>
+<td>All shown scans</td>
+</tr>
+<tr>
+<td><code>-sT</code></td>
+<td>TCP connect scan</td>
+<td>No raw SYN privileges</td>
+<td>Modbus/S7</td>
+</tr>
+<tr>
+<td><code>-sU</code></td>
+<td>UDP scan</td>
+<td>UDP OT protocol</td>
+<td>EtherNet/IP/BACnet</td>
+</tr>
+<tr>
+<td><code>--scan-delay</code></td>
+<td>Wait between probes</td>
+<td>Reduce OT load</td>
+<td><code>1s</code></td>
+</tr>
+<tr>
+<td><code>--max-parallelism</code></td>
+<td>Limit concurrent probes</td>
+<td>Fragile devices</td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td><code>--script</code></td>
+<td>Run NSE script</td>
+<td>Extract device details</td>
+<td><code>s7-info</code></td>
+</tr>
+<tr>
+<td><code>-p</code></td>
+<td>Select ports</td>
+<td>Minimize traffic</td>
+<td><code>502</code></td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-text">PORT    STATE SERVICE
+502/tcp open  modbus
+| modbus-discover:
+|   Unit ID: 1
+|_  Device identification: Lab Controller
+</code></pre>
+<p>Port state shows reachability; script output identifies protocol details. <code>Unit ID</code>
+selects a Modbus logical slave. The notes show <code>-P</code> in several OCR lines; lowercase
+<code>-p</code> is the correct port option. Omron FINS normally uses UDP 9600, while the slide
+shows <code>-sT</code>; treat that exact transport as [UNCLEAR on page 31] and prioritize the
+port/script pairing in the exam. Active OT scans need approval. Exam focus is matching
+script, transport, and port.</p>
+<h3 id="511-fuzzowski-protocol-fuzzing">5.11 Fuzzowski protocol fuzzing</h3>
+<p><strong>Purpose:</strong> Test protocol parsers for crashes and exploitable input-handling errors.</p>
+<pre><code class="language-bash">python -m fuzzowski 127.0.0.1 47808 -p udp \
+  -f bacnet -rt 0.5 -m BACnetMon
+python -m fuzzowski 127.0.0.1 502 -p tcp \
+  -f modbus -rt 1 -m modbusMon
+python -m fuzzowski printer1 631 -f ipp \
+  -r get_printer_attribs --restart smartplug
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Meaning</th>
+<th>When used</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-p</code></td>
+<td>Transport protocol</td>
+<td>TCP, UDP, SSL</td>
+<td><code>-p udp</code></td>
+</tr>
+<tr>
+<td><code>-f</code></td>
+<td>Fuzzer/request set</td>
+<td>Select protocol</td>
+<td><code>-f bacnet</code></td>
+</tr>
+<tr>
+<td><code>-rt</code></td>
+<td>Receive timeout</td>
+<td>Bound waiting</td>
+<td><code>-rt 1</code></td>
+</tr>
+<tr>
+<td><code>-st</code></td>
+<td>Send timeout</td>
+<td>Bound sending</td>
+<td><code>-st 5</code></td>
+</tr>
+<tr>
+<td><code>-r</code></td>
+<td>Selected requests</td>
+<td>Narrow test</td>
+<td><code>get_printer_attribs</code></td>
+</tr>
+<tr>
+<td><code>-m</code></td>
+<td>Monitor module</td>
+<td>Observe crashes</td>
+<td><code>modbusMon</code></td>
+</tr>
+<tr>
+<td><code>--restart</code></td>
+<td>Restarter module</td>
+<td>Recover target</td>
+<td><code>smartplug</code></td>
+</tr>
+<tr>
+<td><code>--restart-sleep</code></td>
+<td>Delay after restart</td>
+<td>Stabilize target</td>
+<td><code>5</code></td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-text">Target: 127.0.0.1:502
+Protocol: tcp
+Fuzzer: modbus
+Monitor: modbusMon
+</code></pre>
+<p>The target/port define the endpoint; protocol and fuzzer must match. Monitor/restart
+options help detect and recover lab crashes. Upstream Fuzzowski documents IPP fully
+and BACnet/Modbus as partial implementations; the notes provide the latter commands,
+so availability can depend on version. The key trap is <code>-r</code>: requests, not receive
+timeout. Never fuzz live production controls.</p>
+<h3 id="512-metasploit-modbus-auxiliary-modules">5.12 Metasploit Modbus auxiliary modules</h3>
+<p><strong>Purpose:</strong> Discover Modbus unit IDs and read register data on an authorized testbed.</p>
+<pre><code class="language-bash">use auxiliary/scanner/scada/modbus_findunitid
+show options
+set RHOST 192.168.30.104
+run
+use auxiliary/scanner/scada/modbusclient
+set DATA_ADDRESS 0
+set NUMBER 5
+set RHOST 192.168.30.104
+set UNIT_NUMBER 2
+run
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Meaning</th>
+<th>When used</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RHOST</code></td>
+<td>Target address</td>
+<td>Select test PLC</td>
+<td><code>192.168.30.104</code></td>
+</tr>
+<tr>
+<td><code>RPORT</code></td>
+<td>Target TCP port</td>
+<td>Default Modbus</td>
+<td><code>502</code></td>
+</tr>
+<tr>
+<td><code>UNIT_ID_FROM</code></td>
+<td>First unit to test</td>
+<td>Discovery range</td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td><code>UNIT_ID_TO</code></td>
+<td>Last unit to test</td>
+<td>Discovery range</td>
+<td><code>254</code></td>
+</tr>
+<tr>
+<td><code>DATA_ADDRESS</code></td>
+<td>Starting register</td>
+<td>Read selected data</td>
+<td><code>0</code></td>
+</tr>
+<tr>
+<td><code>NUMBER</code></td>
+<td>Number of values</td>
+<td>Limit read size</td>
+<td><code>5</code></td>
+</tr>
+<tr>
+<td><code>UNIT_NUMBER</code></td>
+<td>Selected slave</td>
+<td>Client request</td>
+<td><code>2</code></td>
+</tr>
+<tr>
+<td><code>BENICE</code></td>
+<td>Delay between stations</td>
+<td>Reduce load</td>
+<td>Seconds, if offered</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-text">192.168.30.104:502 - correct MODBUS/TCP from stationID 2
+192.168.30.104:502 - 5 register values from address 0:
+[111, 22, 33, 0, 0]
+Auxiliary module execution completed
+</code></pre>
+<p>Correct protocol replies identify active station IDs. The array lists five consecutive
+values beginning at address zero. "Incorrect/none" suggests no usable reply, not
+conclusive absence. These are auxiliary modules, not necessarily exploit payloads.
+Exam focus: <code>modbus_findunitid</code> discovers; <code>modbusclient</code> reads/manipulates data.</p>
+<h3 id="513-modbus-cli">5.13 modbus-cli</h3>
+<p><strong>Purpose:</strong> Read, write, and back up Modbus TCP registers and coils.</p>
+<pre><code class="language-bash">gem install modbus-cli
+modbus read 192.168.30.104 %MW100 10
+modbus read 192.168.30.104 400101 10
+modbus write 192.168.30.104 %MW100 2 2 2 2 2 2 2 2
+modbus read 192.168.30.104 %M100 10
+modbus read 192.168.30.104 101 10
+modbus write 192.168.30.104 %M100 1 1 1 1 1 1 1 1
+modbus read --output SCADAregisters.txt \
+  192.168.30.104 %MW100 200
+modbus read --output SCADAcoils.txt \
+  192.168.30.104 %M100 100
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Meaning</th>
+<th>When used</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>%MW100</code></td>
+<td>16-bit memory word</td>
+<td>Register access</td>
+<td>Read ten words</td>
+</tr>
+<tr>
+<td><code>%M100</code></td>
+<td>Boolean memory coil</td>
+<td>One-bit access</td>
+<td>Read ten coils</td>
+</tr>
+<tr>
+<td><code>400101</code></td>
+<td>Register reference</td>
+<td>Vendor addressing</td>
+<td>Same slide register</td>
+</tr>
+<tr>
+<td><code>101</code></td>
+<td>Coil reference</td>
+<td>Vendor addressing</td>
+<td>Same slide coil</td>
+</tr>
+<tr>
+<td><code>--word</code></td>
+<td>Unsigned 16-bit</td>
+<td>Default register type</td>
+<td>16 bits</td>
+</tr>
+<tr>
+<td><code>--int</code></td>
+<td>Signed integer</td>
+<td>Negative values</td>
+<td>16 bits</td>
+</tr>
+<tr>
+<td><code>--float</code></td>
+<td>Floating point</td>
+<td>Real values</td>
+<td>32 bits</td>
+</tr>
+<tr>
+<td><code>--dword</code></td>
+<td>Double word</td>
+<td>Larger unsigned data</td>
+<td>32 bits</td>
+</tr>
+<tr>
+<td><code>--output</code></td>
+<td>Save values</td>
+<td>Backup/evidence</td>
+<td>Text filename</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-text">%MW100  1
+%MW101  0
+%MW102  0
+%MW103  17302
+%M100   1
+%M101   0
+</code></pre>
+<p>Each line pairs an address with its value. Registers hold words; coils hold 0 or 1.
+The final count requests consecutive values, not a single literal value. Writing can
+change a physical process, so reads are the safer demonstration.</p>
+<pre><code class="language-yaml">:host: 192.168.30.104
+:port: 502
+:slave: 1
+:offset: '101'
+:data:
+</code></pre>
+<p>The output file records connection metadata, offset, and data for later restoration
+or comparison. Mistakes include using a coil address for a register, forgetting that
+float/dword consume 32 bits, and running writes outside a testbed. Exam focus is
+read versus write, address notation, and <code>--output</code>.</p>
+<h3 id="514-reading-the-fuxnet-console-evidence">5.14 Reading the Fuxnet console evidence</h3>
+<p><strong>Purpose:</strong> Recognize malware-deployment artifacts without treating them as an OT
+assessment procedure.</p>
+<pre><code class="language-bash">cat all_sensor_router_ips-ex-civilian.txt
+xargs -P10 -I{} ./fuxnet.sh {} 2&gt;logseq
+rm fuxnet.sh
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Part</th>
+<th>Meaning</th>
+<th>Evidence value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cat</code></td>
+<td>Print IP-list contents</td>
+<td>Shows selected targets</td>
+</tr>
+<tr>
+<td><code>xargs</code></td>
+<td>Build command invocations</td>
+<td>Feeds each listed IP</td>
+</tr>
+<tr>
+<td><code>-P10</code></td>
+<td>Ten parallel processes</td>
+<td>Rapid deployment</td>
+</tr>
+<tr>
+<td><code>-I{}</code></td>
+<td>Replace <code>{}</code> with input</td>
+<td>Per-target argument</td>
+</tr>
+<tr>
+<td><code>2&gt;logseq</code></td>
+<td>Redirect standard error</td>
+<td>Preserves error trail</td>
+</tr>
+<tr>
+<td><code>rm</code></td>
+<td>Remove deployment script</td>
+<td>Anti-forensic indicator</td>
+</tr>
+</tbody>
+</table>
+<p>The notes also show "Deploying Fuxnet to" lines and JSON fields for IP, port,
+collector, and control room. These support targeting and execution conclusions.
+Do not run destructive malware. The exam asks for behavior recognition, not syntax
+reproduction.</p>
+<h2 id="6-ports-protocols-standards-and-acronyms">6. Ports, Protocols, Standards and Acronyms</h2>
+<blockquote>
+<p><strong>ADDED CONTEXT:</strong> Default ports and short protocol introductions supplement the
+slide lists for exam recognition. A default port never proves a device's identity.</p>
+</blockquote>
+<h3 id="61-core-network-and-ot-ports">6.1 Core network and OT ports</h3>
+<table>
+<thead>
+<tr>
+<th>Protocol</th>
+<th>Simple purpose</th>
+<th>Default port/layer</th>
+<th>Weakness</th>
+<th>Related tool/attack</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MQTT</td>
+<td>Lightweight pub/sub</td>
+<td>TCP 1883</td>
+<td>Plaintext if no TLS</td>
+<td>Wireshark sniffing</td>
+</tr>
+<tr>
+<td>Telnet</td>
+<td>Remote text terminal</td>
+<td>TCP 23</td>
+<td>Cleartext credentials</td>
+<td>Shodan, default login</td>
+</tr>
+<tr>
+<td>SSH</td>
+<td>Secure remote terminal</td>
+<td>TCP 22</td>
+<td>Weak passwords</td>
+<td>KmsdBot targeting</td>
+</tr>
+<tr>
+<td>HTTP</td>
+<td>Web communication</td>
+<td>TCP 80</td>
+<td>Cleartext without TLS</td>
+<td>Camera interface</td>
+</tr>
+<tr>
+<td>HTTPS</td>
+<td>Encrypted web</td>
+<td>TCP 443</td>
+<td>Bad certificate checks</td>
+<td>Web/API attacks</td>
+</tr>
+<tr>
+<td>Modbus/TCP</td>
+<td>PLC registers/coils</td>
+<td>TCP 502</td>
+<td>No native auth/encryption</td>
+<td>Nmap, modbus-cli</td>
+</tr>
+<tr>
+<td>DNP3</td>
+<td>Utility SCADA messaging</td>
+<td>TCP/UDP 20000</td>
+<td>Legacy exposed setups</td>
+<td>Shodan remote access</td>
+</tr>
+<tr>
+<td>EtherNet/IP</td>
+<td>Industrial CIP over IP</td>
+<td>TCP/UDP 44818</td>
+<td>Exposure and spoofing</td>
+<td>Nmap <code>enip-info</code></td>
+</tr>
+<tr>
+<td>S7comm</td>
+<td>Siemens PLC communication</td>
+<td>TCP 102</td>
+<td>Unauthorized programming</td>
+<td>Nmap <code>s7-info</code></td>
+</tr>
+<tr>
+<td>Niagara Fox</td>
+<td>Niagara system communication</td>
+<td>TCP 1911,4911</td>
+<td>Information exposure</td>
+<td>Nmap <code>fox-info</code></td>
+</tr>
+<tr>
+<td>ProConOS</td>
+<td>PLC runtime communication</td>
+<td>TCP 20547</td>
+<td>Exposed controller data</td>
+<td>Nmap script</td>
+</tr>
+<tr>
+<td>Omron FINS</td>
+<td>Omron PLC communication</td>
+<td>UDP 9600 typical</td>
+<td>Weak network trust</td>
+<td>Nmap <code>omron-info</code></td>
+</tr>
+<tr>
+<td>BACnet/IP</td>
+<td>Building automation</td>
+<td>UDP 47808</td>
+<td>Trusting legacy traffic</td>
+<td>Nmap/Fuzzowski</td>
+</tr>
+<tr>
+<td>PCWorx</td>
+<td>Phoenix Contact PLC service</td>
+<td>TCP 1962</td>
+<td>Controller exposure</td>
+<td>Nmap script</td>
+</tr>
+<tr>
+<td>HMI slide port</td>
+<td>HMI discovery example</td>
+<td>TCP 46824</td>
+<td>Exposed management</td>
+<td>Nmap discovery</td>
+</tr>
+<tr>
+<td>IEC-104</td>
+<td>Telecontrol over TCP</td>
+<td>TCP 2404</td>
+<td>Unauthorized commands</td>
+<td>INDUSTROYER.V2</td>
+</tr>
+<tr>
+<td>ICCP/TASE.2</td>
+<td>Control-center exchange</td>
+<td>TCP 102 commonly</td>
+<td>Trusted associations</td>
+<td>Nessus detection</td>
+</tr>
+<tr>
+<td>OPC UA</td>
+<td>Industrial interoperability</td>
+<td>TCP 4840</td>
+<td>Bad endpoint security</td>
+<td>IT/OT data exchange</td>
+</tr>
+<tr>
+<td>HART-IP</td>
+<td>Smart instrument access</td>
+<td>TCP/UDP 5094</td>
+<td>Field-data exposure</td>
+<td>Level 2 discovery</td>
+</tr>
+<tr>
+<td>CoAP</td>
+<td>Constrained REST messaging</td>
+<td>UDP 5683</td>
+<td>No security if plain</td>
+<td>IoT data access</td>
+</tr>
+<tr>
+<td>CoAPS</td>
+<td>Secured CoAP</td>
+<td>UDP 5684</td>
+<td>Bad key management</td>
+<td>DTLS protection</td>
+</tr>
+<tr>
+<td>LWM2M</td>
+<td>IoT device management</td>
+<td>UDP 5683/5684</td>
+<td>Bootstrap/key flaws</td>
+<td>Fleet management</td>
+</tr>
+<tr>
+<td>XMPP</td>
+<td>Extensible messaging</td>
+<td>TCP 5222 client</td>
+<td>Weak authentication</td>
+<td>IoT messaging</td>
+</tr>
+<tr>
+<td>FTP</td>
+<td>File transfer</td>
+<td>TCP 21</td>
+<td>Cleartext credentials</td>
+<td>Exposed SCADA banners</td>
+</tr>
+<tr>
+<td>SFTP</td>
+<td>File transfer over SSH</td>
+<td>TCP 22</td>
+<td>Weak SSH identity</td>
+<td>Secure updates</td>
+</tr>
+<tr>
+<td>SMTP</td>
+<td>Email delivery</td>
+<td>TCP 25</td>
+<td>Spoofing/plaintext</td>
+<td>Phishing path</td>
+</tr>
+<tr>
+<td>DNS</td>
+<td>Name resolution</td>
+<td>TCP/UDP 53</td>
+<td>Rebinding/spoofing</td>
+<td>Local IoT access</td>
+</tr>
+<tr>
+<td>DNSSEC</td>
+<td>DNS origin validation</td>
+<td>DNS extension</td>
+<td>Does not encrypt data</td>
+<td>Signed DNS answers</td>
+</tr>
+<tr>
+<td>NTP</td>
+<td>Time synchronization</td>
+<td>UDP 123</td>
+<td>Spoofing/amplification</td>
+<td>Log and replay risk</td>
+</tr>
+<tr>
+<td>UPnP</td>
+<td>Automatic device discovery</td>
+<td>UDP 1900</td>
+<td>Unwanted port exposure</td>
+<td>Disable on routers</td>
+</tr>
+<tr>
+<td>Cited malware</td>
+<td>Malicious file spread</td>
+<td>TCP 48101</td>
+<td>Infected-device traffic</td>
+<td>Monitor/block</td>
+</tr>
+</tbody>
+</table>
+<h3 id="62-wireless-link-fieldbus-and-industrial-technologies">6.2 Wireless, link, fieldbus, and industrial technologies</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Simple purpose</th>
+<th>Range/layer</th>
+<th>Security concern</th>
+<th>Example use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BLE</td>
+<td>Low-power Bluetooth</td>
+<td>Short/link</td>
+<td>Pairing and BlueBorne</td>
+<td>Wearables</td>
+</tr>
+<tr>
+<td>NFC</td>
+<td>Very-close communication</td>
+<td>Short/link</td>
+<td>Relay/eavesdropping</td>
+<td>Access cards</td>
+</tr>
+<tr>
+<td>RFID</td>
+<td>Radio identification</td>
+<td>Short/link</td>
+<td>Cloning/tracking</td>
+<td>Asset tags</td>
+</tr>
+<tr>
+<td>QR/barcode</td>
+<td>Optical data labels</td>
+<td>Short/visual</td>
+<td>Malicious destination</td>
+<td>Device onboarding</td>
+</tr>
+<tr>
+<td>Wi-Fi</td>
+<td>Local IP wireless</td>
+<td>Medium/link</td>
+<td>Weak keys/rogue AP</td>
+<td>Gateways</td>
+</tr>
+<tr>
+<td>Wi-Fi Direct</td>
+<td>Peer Wi-Fi</td>
+<td>Medium/link</td>
+<td>Unauthorized pairing</td>
+<td>Direct devices</td>
+</tr>
+<tr>
+<td>HaLow</td>
+<td>Sub-GHz Wi-Fi</td>
+<td>Medium/link</td>
+<td>Weak configuration</td>
+<td>Longer IoT links</td>
+</tr>
+<tr>
+<td>LTE-Advanced</td>
+<td>Cellular broadband</td>
+<td>Long/WAN</td>
+<td>Rogue cell/interception</td>
+<td>Mobile gateways</td>
+</tr>
+<tr>
+<td>Zigbee</td>
+<td>Low-power mesh</td>
+<td>802.15.4</td>
+<td>Replay/key handling</td>
+<td>Sensors</td>
+</tr>
+<tr>
+<td>Thread</td>
+<td>IPv6 low-power mesh</td>
+<td>802.15.4</td>
+<td>Commissioning flaws</td>
+<td>Smart home</td>
+</tr>
+<tr>
+<td>Z-Wave</td>
+<td>Low-power mesh</td>
+<td>Sub-GHz/link</td>
+<td>Pairing/replay</td>
+<td>Home control</td>
+</tr>
+<tr>
+<td>ANT</td>
+<td>Low-power sensor radio</td>
+<td>Short/link</td>
+<td>Spoofed sensors</td>
+<td>Fitness devices</td>
+</tr>
+<tr>
+<td>LoRaWAN</td>
+<td>Long-range low-power WAN</td>
+<td>LPWAN</td>
+<td>Key/join weaknesses</td>
+<td>Remote meters</td>
+</tr>
+<tr>
+<td>Sigfox</td>
+<td>Narrowband LPWAN</td>
+<td>LPWAN</td>
+<td>Limited payload security</td>
+<td>Simple sensors</td>
+</tr>
+<tr>
+<td>Neul</td>
+<td>Early LPWAN technology</td>
+<td>LPWAN</td>
+<td>Legacy deployments</td>
+<td>Wide-area IoT</td>
+</tr>
+<tr>
+<td>NB-IoT</td>
+<td>Cellular narrowband IoT</td>
+<td>LPWAN</td>
+<td>Core/device trust</td>
+<td>Utility sensors</td>
+</tr>
+<tr>
+<td>6LoWPAN</td>
+<td>IPv6 over constrained links</td>
+<td>Adaptation</td>
+<td>Fragmentation/trust</td>
+<td>802.15.4 IP</td>
+</tr>
+<tr>
+<td>VSAT</td>
+<td>Satellite terminal link</td>
+<td>Long/WAN</td>
+<td>Remote-link exposure</td>
+<td>Remote sites</td>
+</tr>
+<tr>
+<td>Li-Fi</td>
+<td>Optical wireless</td>
+<td>Short/link</td>
+<td>Proximity interception</td>
+<td>Optical data</td>
+</tr>
+<tr>
+<td>Ethernet</td>
+<td>Wired local networking</td>
+<td>Link</td>
+<td>Sniffing if unencrypted</td>
+<td>Plant backbone</td>
+</tr>
+<tr>
+<td>MoCA</td>
+<td>Networking over coax</td>
+<td>Link</td>
+<td>Unauthorized coax access</td>
+<td>Building links</td>
+</tr>
+<tr>
+<td>Power-line PLC</td>
+<td>Data over power wiring</td>
+<td>Link</td>
+<td>Shared-medium exposure</td>
+<td>Building IoT</td>
+</tr>
+<tr>
+<td>Profibus</td>
+<td>Industrial fieldbus</td>
+<td>Fieldbus</td>
+<td>No inherent modern auth</td>
+<td>Field devices</td>
+</tr>
+<tr>
+<td>Profinet</td>
+<td>Industrial Ethernet</td>
+<td>L2/IP based</td>
+<td>Unauthorized control</td>
+<td>Controllers</td>
+</tr>
+<tr>
+<td>ControlNet</td>
+<td>Deterministic industrial net</td>
+<td>Fieldbus</td>
+<td>Legacy trust</td>
+<td>PLC networks</td>
+</tr>
+<tr>
+<td>DeviceNet</td>
+<td>Industrial device network</td>
+<td>CAN based</td>
+<td>Legacy trust</td>
+<td>Sensors/actuators</td>
+</tr>
+<tr>
+<td>CANopen</td>
+<td>CAN application protocol</td>
+<td>CAN based</td>
+<td>Spoofed messages</td>
+<td>Embedded control</td>
+</tr>
+<tr>
+<td>EtherCAT</td>
+<td>Real-time industrial Ethernet</td>
+<td>L2</td>
+<td>Timing/control abuse</td>
+<td>Motion control</td>
+</tr>
+<tr>
+<td>Sercos II</td>
+<td>Real-time motion bus</td>
+<td>Fieldbus</td>
+<td>Legacy trust</td>
+<td>Drives</td>
+</tr>
+<tr>
+<td>FOUNDATION Fieldbus</td>
+<td>Digital process fieldbus</td>
+<td>Fieldbus</td>
+<td>Unauthorized field access</td>
+<td>Process instruments</td>
+</tr>
+<tr>
+<td>AS-Interface</td>
+<td>Simple actuator/sensor bus</td>
+<td>Fieldbus</td>
+<td>Physical trust</td>
+<td>Level 2 devices</td>
+</tr>
+<tr>
+<td>CC-Link</td>
+<td>Industrial control network</td>
+<td>Fieldbus/Ethernet</td>
+<td>Controller trust</td>
+<td>Factory automation</td>
+</tr>
+<tr>
+<td>HART</td>
+<td>Smart analog/digital instruments</td>
+<td>Field protocol</td>
+<td>Unauthorized config</td>
+<td>Process sensors</td>
+</tr>
+<tr>
+<td>MELSEC-Q</td>
+<td>Mitsubishi PLC family/protocol</td>
+<td>Controller</td>
+<td>Programming exposure</td>
+<td>Level 0/1 PLC</td>
+</tr>
+<tr>
+<td>GE-SRTP</td>
+<td>GE service request protocol</td>
+<td>Industrial</td>
+<td>Controller exposure</td>
+<td>GE PLC communication</td>
+</tr>
+<tr>
+<td>Crimson v3</td>
+<td>Red Lion configuration software</td>
+<td>OT software</td>
+<td>Project/file risk</td>
+<td>HMI configuration</td>
+</tr>
+<tr>
+<td>SuiteLink</td>
+<td>Wonderware data exchange</td>
+<td>Industrial service</td>
+<td>Trusted data access</td>
+<td>Operations data</td>
+</tr>
+<tr>
+<td>FTE</td>
+<td>Fault Tolerant Ethernet</td>
+<td>Industrial network</td>
+<td>Trusted control traffic</td>
+<td>Honeywell systems</td>
+</tr>
+<tr>
+<td>HSCP</td>
+<td>OT protocol listed in notes</td>
+<td>Industrial</td>
+<td>Verify exact expansion</td>
+<td>Purdue Level 3</td>
+</tr>
+</tbody>
+</table>
+<p>[UNCLEAR on page 22] HSCP is reproduced as printed, but its expansion is not
+reliably established from the notes. Do not invent a port for it. "Edge" and
+"Physical Web" are application technologies, while Mihini/M3DA is a machine-to-machine
+messaging framework; no single exam default port should be inferred.</p>
+<blockquote>
+<p><strong>ADDED CONTEXT:</strong> Modbus function 03 reads holding registers and 04 reads input
+registers; 01 reads coils; 06 writes one holding register. Coils/discrete values are
+one bit, while registers are 16 bits. Exact support varies by device.</p>
+</blockquote>
+<h3 id="63-standards-and-architecture-terms">6.3 Standards and architecture terms</h3>
+<table>
+<thead>
+<tr>
+<th>Standard/term</th>
+<th>Simple purpose</th>
+<th>Where used</th>
+<th>Security concern</th>
+<th>Related defense</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ISA/IEC 62443</td>
+<td>Industrial security standard</td>
+<td>All OT zones</td>
+<td>Poor role/requirement mapping</td>
+<td>Zones and conduits</td>
+</tr>
+<tr>
+<td>IEC 61850</td>
+<td>Power-substation communication</td>
+<td>Utility OT</td>
+<td>Engineering/access abuse</td>
+<td>Segmentation/monitoring</td>
+</tr>
+<tr>
+<td>IEC 60870-5-101</td>
+<td>Serial telecontrol</td>
+<td>Utility field</td>
+<td>Legacy trust</td>
+<td>Controlled gateways</td>
+</tr>
+<tr>
+<td>ISA SP100</td>
+<td>Wireless industrial standard</td>
+<td>Field wireless</td>
+<td>Key/network trust</td>
+<td>Secure commissioning</td>
+</tr>
+<tr>
+<td>PERA/Purdue</td>
+<td>ICS architecture model</td>
+<td>IT/OT</td>
+<td>Flat direct connections</td>
+<td>IDMZ and zoning</td>
+</tr>
+<tr>
+<td>MITRE ATT&amp;CK ICS</td>
+<td>Adversary behavior knowledge</td>
+<td>Detection/response</td>
+<td>Missing coverage</td>
+<td>Behavior detections</td>
+</tr>
+<tr>
+<td>OWASP IoT Top 10</td>
+<td>Common IoT weakness list</td>
+<td>Design/review</td>
+<td>Misclassification</td>
+<td>Secure lifecycle</td>
+</tr>
+<tr>
+<td>PKI</td>
+<td>Certificates and key trust</td>
+<td>Identity/encryption</td>
+<td>Bad revocation checks</td>
+<td>Managed CA/CRL</td>
+</tr>
+<tr>
+<td>TLS</td>
+<td>Transport encryption</td>
+<td>TCP applications</td>
+<td>Old versions/bad validation</td>
+<td>Modern TLS/mTLS</td>
+</tr>
+<tr>
+<td>SSLv2</td>
+<td>Obsolete secure transport</td>
+<td>Legacy devices</td>
+<td>Broken security</td>
+<td>Disable immediately</td>
+</tr>
+<tr>
+<td>IPsec</td>
+<td>IP-layer protection</td>
+<td>Network/VPN</td>
+<td>Weak policy/keys</td>
+<td>Encrypted conduits</td>
+</tr>
+<tr>
+<td>VPN</td>
+<td>Protected remote tunnel</td>
+<td>Remote access</td>
+<td>Broad post-login access</td>
+<td>MFA plus least privilege</td>
+</tr>
+<tr>
+<td>RBAC</td>
+<td>Role-based access control</td>
+<td>Users/vendors</td>
+<td>Excessive roles</td>
+<td>Role review</td>
+</tr>
+<tr>
+<td>DLP</td>
+<td>Data-loss prevention</td>
+<td>Enterprise</td>
+<td>Sensor/data exfiltration</td>
+<td>Egress controls</td>
+</tr>
+<tr>
+<td>IDS/IPS</td>
+<td>Detect/prevent intrusions</td>
+<td>IT/OT monitoring</td>
+<td>Unsafe active response</td>
+<td>Passive OT tuning</td>
+</tr>
+<tr>
+<td>DMZ/IDMZ</td>
+<td>Buffer between trust zones</td>
+<td>IT/OT boundary</td>
+<td>Direct bypass paths</td>
+<td>Brokered services</td>
+</tr>
+<tr>
+<td>Zero trust</td>
+<td>Verify and minimize access</td>
+<td>Legacy/modern OT</td>
+<td>Implicit vendor trust</td>
+<td>Continuous validation</td>
+</tr>
+<tr>
+<td>CRL</td>
+<td>Certificate revocation list</td>
+<td>PKI</td>
+<td>Stale revocation data</td>
+<td>Current validation</td>
+</tr>
+<tr>
+<td>FOTA</td>
+<td>Firmware over the air</td>
+<td>IoT updates</td>
+<td>Unsigned/malicious image</td>
+<td>Signed secure update</td>
+</tr>
+<tr>
+<td>RSSI</td>
+<td>Received signal strength</td>
+<td>RF testing</td>
+<td>Signal filtering</td>
+<td>RFCrack bounds</td>
+</tr>
+<tr>
+<td>BSSID</td>
+<td>Wireless AP radio identity</td>
+<td>Wi-Fi recon</td>
+<td>Device identification</td>
+<td>Local discovery</td>
+</tr>
+</tbody>
+</table>
+<h3 id="64-quick-acronym-decoder">6.4 Quick acronym decoder</h3>
+<table>
+<thead>
+<tr>
+<th>Acronym</th>
+<th>Meaning</th>
+<th>One-line role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IoT/IoE</td>
+<td>Internet of Things/Everything</td>
+<td>Connected sensing objects</td>
+</tr>
+<tr>
+<td>IIoT</td>
+<td>Industrial Internet of Things</td>
+<td>IoT in industry</td>
+</tr>
+<tr>
+<td>OT/ICS</td>
+<td>Operational Technology/Control System</td>
+<td>Physical industrial control</td>
+</tr>
+<tr>
+<td>SCADA</td>
+<td>Supervisory Control and Data Acquisition</td>
+<td>Wide-area supervision</td>
+</tr>
+<tr>
+<td>PLC</td>
+<td>Programmable Logic Controller</td>
+<td>Local control logic</td>
+</tr>
+<tr>
+<td>RTU</td>
+<td>Remote Terminal Unit</td>
+<td>Remote field interface</td>
+</tr>
+<tr>
+<td>DCS</td>
+<td>Distributed Control System</td>
+<td>Distributed plant control</td>
+</tr>
+<tr>
+<td>HMI</td>
+<td>Human-Machine Interface</td>
+<td>Operator display/control</td>
+</tr>
+<tr>
+<td>BPCS</td>
+<td>Basic Process Control System</td>
+<td>Routine process control</td>
+</tr>
+<tr>
+<td>SIS</td>
+<td>Safety Instrumented System</td>
+<td>Protective safe-state control</td>
+</tr>
+<tr>
+<td>IED</td>
+<td>Intelligent Electronic Device</td>
+<td>Smart protection/monitoring</td>
+</tr>
+<tr>
+<td>VFD</td>
+<td>Variable-Frequency Drive</td>
+<td>Motor-speed control</td>
+</tr>
+<tr>
+<td>PID</td>
+<td>Proportional-Integral-Derivative</td>
+<td>Feedback control algorithm</td>
+</tr>
+<tr>
+<td>SDR</td>
+<td>Software-Defined Radio</td>
+<td>Programmable radio</td>
+</tr>
+<tr>
+<td>EMFI/BBI</td>
+<td>Electromagnetic/Body-Bias Injection</td>
+<td>Hardware fault methods</td>
+</tr>
+<tr>
+<td>UART/SPI/I2C</td>
+<td>Serial hardware interfaces</td>
+<td>Board communication</td>
+</tr>
+<tr>
+<td>JTAG</td>
+<td>Joint Test Action Group</td>
+<td>Hardware test/debug</td>
+</tr>
+<tr>
+<td>C2/C&amp;C</td>
+<td>Command and Control</td>
+<td>Botnet tasking channel</td>
+</tr>
+<tr>
+<td>NSE</td>
+<td>Nmap Scripting Engine</td>
+<td>Nmap service scripts</td>
+</tr>
+<tr>
+<td>NSM</td>
+<td>Network Security Monitoring</td>
+<td>Traffic-based visibility</td>
+</tr>
+</tbody>
+</table>
+<h2 id="7-attack-vs-countermeasure-and-look-alike-comparisons">7. Attack vs Countermeasure and Look-alike Comparisons</h2>
+<h3 id="71-attacks-and-best-matched-countermeasures">7.1 Attacks and best-matched countermeasures</h3>
+<table>
+<thead>
+<tr>
+<th>Attack</th>
+<th>How to recognize</th>
+<th>Main defense</th>
+<th>Supporting control</th>
+<th>Avoid this mistake</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IoT DDoS</td>
+<td>Many bots flood target</td>
+<td>Upstream DDoS protection</td>
+<td>Patch and egress filter</td>
+<td>Only rebooting server</td>
+</tr>
+<tr>
+<td>Rolling code</td>
+<td>Jam, capture, reuse</td>
+<td>Authenticated freshness</td>
+<td>Failure alerts</td>
+<td>Plain replay defense</td>
+</tr>
+<tr>
+<td>Jamming</td>
+<td>Same-frequency interference</td>
+<td>RF monitoring/resilience</td>
+<td>Alternate channels</td>
+<td>Encryption only</td>
+</tr>
+<tr>
+<td>Backdoor phishing</td>
+<td>Attachment creates access</td>
+<td>Email/endpoint controls</td>
+<td>MFA and reporting</td>
+<td>Firewall only</td>
+</tr>
+<tr>
+<td>Telnet access</td>
+<td>TCP 23 and weak login</td>
+<td>Disable Telnet/use SSH</td>
+<td>MFA and segmentation</td>
+<td>Hiding port only</td>
+</tr>
+<tr>
+<td>DNS rebinding</td>
+<td>Hostname changes to private IP</td>
+<td>Host/DNS validation</td>
+<td>Local interface auth</td>
+<td>Ordinary antivirus only</td>
+</tr>
+<tr>
+<td>Replay</td>
+<td>Valid old message resent</td>
+<td>Nonce/timestamp freshness</td>
+<td>Message authentication</td>
+<td>Encryption alone</td>
+</tr>
+<tr>
+<td>Fault injection</td>
+<td>Glitch bypasses checks</td>
+<td>Secure boot/glitch sensors</td>
+<td>Tamper resistance</td>
+<td>Software patch only</td>
+</tr>
+<tr>
+<td>Side channel</td>
+<td>Timing/power reveals secret</td>
+<td>Constant-time/leak resistance</td>
+<td>Physical shielding</td>
+<td>Longer key only</td>
+</tr>
+<tr>
+<td>Firmware persistence</td>
+<td>Modified image survives</td>
+<td>Signed secure boot</td>
+<td>Trusted reflash</td>
+<td>Password reset only</td>
+</tr>
+<tr>
+<td>HMI memory attack</td>
+<td>Overflow/project exploit</td>
+<td>Patch and input validation</td>
+<td>Remove unsafe ActiveX</td>
+<td>Only stronger password</td>
+</tr>
+<tr>
+<td>PLC rootkit</td>
+<td>Hidden I/O manipulation</td>
+<td>Logic integrity verification</td>
+<td>Restrict programming</td>
+<td>Trusting HMI display</td>
+</tr>
+<tr>
+<td>Evil PLC</td>
+<td>PLC attacks workstation</td>
+<td>Workstation/controller isolation</td>
+<td>Signed project files</td>
+<td>Treat PLC as trusted</td>
+</tr>
+<tr>
+<td>RF re-pairing</td>
+<td>Hostile controller paired</td>
+<td>Authenticated pairing</td>
+<td>Physical control</td>
+<td>Replay detection only</td>
+</tr>
+<tr>
+<td>OT supply chain</td>
+<td>Trusted vendor is path</td>
+<td>Supplier verification</td>
+<td>Signed updates/RBAC</td>
+<td>Blind vendor trust</td>
+</tr>
+<tr>
+<td>Modbus manipulation</td>
+<td>Unauthorized register write</td>
+<td>Zone/ACL master restriction</td>
+<td>Function-code monitoring</td>
+<td>Flat OT network</td>
+</tr>
+<tr>
+<td>Outbound OT C2</td>
+<td>Controller reaches internet</td>
+<td>Egress deny by default</td>
+<td>Separate update broker</td>
+<td>Inbound rules only</td>
+</tr>
+</tbody>
+</table>
+<h3 id="72-look-alike-pairs">7.2 Look-alike pairs</h3>
+<table>
+<thead>
+<tr>
+<th>X vs Y</th>
+<th>Difference in one line</th>
+<th>Question clue</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IoT vs OT</td>
+<td>Connected things vs industrial physical control</td>
+<td>Camera vs production PLC</td>
+</tr>
+<tr>
+<td>PLC vs RTU</td>
+<td>Local logic vs remote telemetry/control</td>
+<td>Deterministic machine vs remote site</td>
+</tr>
+<tr>
+<td>SCADA vs DCS</td>
+<td>Wide supervision vs distributed plant control</td>
+<td>Pipeline vs processing plant</td>
+</tr>
+<tr>
+<td>HMI vs SCADA</td>
+<td>Operator screen vs supervisory system</td>
+<td>Display vs whole architecture</td>
+</tr>
+<tr>
+<td>Level 0 vs Level 1</td>
+<td>Physical process vs basic controllers</td>
+<td>Sensor/motor vs PLC</td>
+</tr>
+<tr>
+<td>DMZ vs IDMZ</td>
+<td>General buffer vs industrial IT/OT buffer</td>
+<td>Purdue Level 3.5</td>
+</tr>
+<tr>
+<td>Shodan vs Nmap</td>
+<td>Indexed banners vs active probes</td>
+<td>Search engine vs scanner</td>
+</tr>
+<tr>
+<td>Nmap vs Nessus</td>
+<td>Service discovery vs known-flaw assessment</td>
+<td>Open port vs vulnerability</td>
+</tr>
+<tr>
+<td>Wireshark vs Malcolm</td>
+<td>Packet decoder vs full NSM platform</td>
+<td>Frame details vs dashboards</td>
+</tr>
+<tr>
+<td>Jamming vs replay</td>
+<td>Interference vs retransmission</td>
+<td>Noise vs old command</td>
+</tr>
+<tr>
+<td>Replay vs rolling-code attack</td>
+<td>Reuse old code vs jam and save unused code</td>
+<td>Two button presses</td>
+</tr>
+<tr>
+<td>MITM vs side channel</td>
+<td>Intercept communication vs observe leakage</td>
+<td>Proxy vs oscilloscope</td>
+</tr>
+<tr>
+<td>Fault vs side channel</td>
+<td>Disturb behavior vs measure behavior</td>
+<td>Voltage glitch vs timing</td>
+</tr>
+<tr>
+<td>UART vs JTAG</td>
+<td>Serial console vs debug/test control</td>
+<td>RX/TX/baud vs execution</td>
+</tr>
+<tr>
+<td>Binwalk vs QEMU</td>
+<td>Extract firmware vs emulate execution</td>
+<td>Squashfs vs MIPS/ARM</td>
+</tr>
+<tr>
+<td>Register vs coil</td>
+<td>Multi-bit storage vs one-bit switch</td>
+<td><code>%MW</code> vs <code>%M</code></td>
+</tr>
+<tr>
+<td>Evil PLC vs PLC rootkit</td>
+<td>PLC attacks workstation vs hidden I/O control</td>
+<td>Upload procedure vs rootkit</td>
+</tr>
+<tr>
+<td>Impair vs inhibit</td>
+<td>Manipulate process vs suppress response</td>
+<td>Setpoints vs blocked alarms</td>
+</tr>
+<tr>
+<td>Initial access vs persistence</td>
+<td>Enter environment vs remain after restart</td>
+<td>Phishing vs firmware</td>
+</tr>
+<tr>
+<td>Encryption vs authentication</td>
+<td>Hide content vs prove identity</td>
+<td>Confidentiality vs trusted sender</td>
+</tr>
+<tr>
+<td>Secure boot vs signed update</td>
+<td>Verify startup chain vs verify new image</td>
+<td>Boot trust vs installation</td>
+</tr>
+<tr>
+<td>IT patch vs OT patch</td>
+<td>Routine update vs tested safe change</td>
+<td>Maintenance window clue</td>
+</tr>
+</tbody>
+</table>
+<h2 id="8-exam-cheat-sheet">8. Exam Cheat Sheet</h2>
+<h3 id="81-keyword-answer">8.1 Keyword -&gt; answer</h3>
+<table>
+<thead>
+<tr>
+<th>Keyword in question</th>
+<th>Best answer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Internet-connected camera banners</td>
+<td>Shodan</td>
+</tr>
+<tr>
+<td>Factory-set camera passwords</td>
+<td>IoTSeeker or CIRT.net</td>
+</tr>
+<tr>
+<td>IoT paths and versions</td>
+<td>Genzai</td>
+</tr>
+<tr>
+<td>1 MHz to 6 GHz half duplex</td>
+<td>HackRF One</td>
+</tr>
+<tr>
+<td>YardStick rolling code <code>-r</code></td>
+<td>RFCrack</td>
+</tr>
+<tr>
+<td>802.15.4 frame capture/replay</td>
+<td>Open Sniffer or KillerBee</td>
+</tr>
+<tr>
+<td>RX/TX and baud 9600</td>
+<td>UART/BUS Auditor</td>
+</tr>
+<tr>
+<td>SCL and SDA</td>
+<td>I2C</td>
+</tr>
+<tr>
+<td>Debug execution flow</td>
+<td>JTAG/GDB/OpenOCD</td>
+</tr>
+<tr>
+<td>Ground flash I/O during boot</td>
+<td>NAND glitching</td>
+</tr>
+<tr>
+<td>Extract Squashfs</td>
+<td>Binwalk/Firmware Mod Kit</td>
+</tr>
+<tr>
+<td>Emulate MIPS firmware</td>
+<td>QEMU</td>
+</tr>
+<tr>
+<td>Camera <code>-a</code> single address</td>
+<td>CamOver</td>
+</tr>
+<tr>
+<td>MQTT ping/publish TCP 1883</td>
+<td>MQTT broker traffic</td>
+</tr>
+<tr>
+<td>OpenSearch plus Arkime</td>
+<td>Malcolm</td>
+</tr>
+<tr>
+<td>Known SCADA vulnerabilities</td>
+<td>Nessus with SCADA plugins</td>
+</tr>
+<tr>
+<td>BACnet, Modbus malformed requests</td>
+<td>Fuzzowski</td>
+</tr>
+<tr>
+<td>IT/OT attack-path prioritization</td>
+<td>Skybox</td>
+</tr>
+<tr>
+<td>Unit identifier discovery</td>
+<td><code>modbus_findunitid</code></td>
+</tr>
+<tr>
+<td>Read <code>%MW100</code></td>
+<td>modbus-cli register read</td>
+</tr>
+<tr>
+<td>Physical process</td>
+<td>Purdue Level 0</td>
+</tr>
+<tr>
+<td>Operations/site operations</td>
+<td>Purdue Level 3</td>
+</tr>
+<tr>
+<td>IT/OT broker boundary</td>
+<td>IDMZ Level 3.5</td>
+</tr>
+<tr>
+<td>Blocked alarm/report messages</td>
+<td>Inhibit response function</td>
+</tr>
+<tr>
+<td>Altered parameters/I/O</td>
+<td>Impair process control</td>
+</tr>
+<tr>
+<td>Sensor gateway destruction</td>
+<td>Fuxnet</td>
+</tr>
+<tr>
+<td>Oscilloscope password inference</td>
+<td>Power side channel</td>
+</tr>
+<tr>
+<td>Safest first OT discovery step</td>
+<td>Passive traffic/asset review</td>
+</tr>
+</tbody>
+</table>
+<h3 id="82-must-memorize-lists-and-numbers">8.2 Must-memorize lists and numbers</h3>
+<ol>
+<li>IoT architecture: Edge, Access Gateway, Internet, Middleware, Application.</li>
+<li>Purdue: L0 process, L1 basic control, L2 supervisory, L3 operations, L3.5 IDMZ,
+   L4 logistics, L5 enterprise.</li>
+<li>Hacking flow in this module: information gathering, vulnerability scanning,
+   launch attacks, gain remote access, maintain access, then countermeasures.</li>
+<li>Modbus 502/TCP; DNP3 20000; S7 102/TCP; EtherNet/IP 44818; BACnet 47808/UDP;
+   Niagara Fox 1911/4911; ProConOS 20547; Omron FINS 9600; PCWorx 1962.</li>
+<li>Telnet 23/TCP; SSH 22/TCP; MQTT 1883/TCP; CoAP 5683/UDP; IPP 631/TCP.</li>
+<li>RFCrack: <code>-i</code> live replay, <code>-r</code> rolling, <code>-j</code> jam, <code>-M</code> modulation,
+   <code>-F</code> frequency, <code>-U/-L</code> RSSI bounds.</li>
+<li>HackRF: <code>-r</code> receive, <code>-t</code> transmit, <code>-f</code> frequency, <code>-x</code> TX VGA gain.</li>
+<li>Nmap OT: <code>-Pn</code> no ping, <code>-sT</code> TCP connect, <code>-sU</code> UDP, <code>-p</code> ports,
+   <code>--script</code> NSE, slow delay and parallelism one for fragile devices.</li>
+<li>Zero trust: define, map, architect, policy, monitor/maintain.</li>
+<li>MITRE ICS effect: inhibit response blocks response; impair process changes control;
+    impact damages/disrupts/denies.</li>
+</ol>
+<h3 id="83-pick-the-best-option-rules">8.3 Pick the BEST option rules</h3>
+<ul>
+<li>If two answers find flaws, choose passive asset/traffic review before active OT scans.</li>
+<li>If the question asks "which tool", match its unique verb: search, scan, decode,
+  fuzz, emulate, extract, debug, or manage.</li>
+<li>If a controller is live and safety matters, do not choose fuzzing or write tests.</li>
+<li>If credentials are default, replace them with unique strong credentials before
+  cosmetic actions such as changing banners.</li>
+<li>If IT and OT connect directly, choose IDMZ/segmentation rather than only antivirus.</li>
+<li>If malware persists in firmware, choose trusted reflash and secure boot, not a
+  password reset.</li>
+<li>If the question describes two fob presses, jamming, and a saved code, choose
+  rolling-code attack over simple replay.</li>
+<li>If a port is open, do not assume exploitation; validate safely and consider banner
+  ambiguity.</li>
+<li>If one control solves root cause and another only detects, choose root-cause fixing
+  unless the scenario makes immediate change unsafe.</li>
+<li>Use commands only on authorized systems; in the exam, operational safety and scope
+  are part of the best answer.</li>
+</ul>
+<h2 id="9-practice-questions">9. Practice Questions</h2>
+<h3 id="question-1-iot-architecture">Question 1: IoT architecture</h3>
+<p>A sensor sends a Zigbee message to a local gateway. The gateway converts it into an
+IP message. Which IoT architecture layer performs this conversion?</p>
+<ul>
+<li>A. Edge technology</li>
+<li>B. Access gateway</li>
+<li>C. Middleware</li>
+<li>D. Application</li>
+</ul>
+<p><strong>Answer: B. Access gateway.</strong> Protocol translation and messaging belong to this layer.
+A is wrong because edge contains sensors/devices. C is wrong because middleware manages
+devices/information. D is wrong because applications deliver user functions.</p>
+<h3 id="question-2-rolling-code-scenario">Question 2: Rolling-code scenario</h3>
+<p>During an authorized vehicle test, the first fob press fails. The test device forwards
+the first captured code after the second press, unlocks the car, and retains the second
+code. What is being demonstrated?</p>
+<ul>
+<li>A. DNS rebinding</li>
+<li>B. Simple sniffing only</li>
+<li>C. Rolling-code attack</li>
+<li>D. Power-analysis attack</li>
+</ul>
+<p><strong>Answer: C. Rolling-code attack.</strong> Jamming/capture and saving an unused later code
+are the distinctive sequence. A changes DNS answers. B does not explain forwarding and
+jamming. D measures chip power rather than RF command codes.</p>
+<h3 id="question-3-best-first-ot-step">Question 3: Best first OT step</h3>
+<p>A consultant receives permission to inventory an old water-treatment network. Several
+PLCs stop if exposed to heavy traffic. What is the BEST first step?</p>
+<ul>
+<li>A. Fuzz Modbus on every controller</li>
+<li>B. Run maximum-speed parallel scans</li>
+<li>C. Review passive traffic and existing asset records</li>
+<li>D. Write test values to unused coils</li>
+</ul>
+<p><strong>Answer: C. Review passive traffic and existing asset records.</strong> It builds visibility
+with minimal process risk. A and B can crash fragile systems. D can change a physical
+process and is not inventory gathering.</p>
+<h3 id="question-4-nmap-flag-reading">Question 4: Nmap flag reading</h3>
+<p>What does <code>--max-parallelism 1</code> do in the OT Nmap command shown in the notes?</p>
+<ul>
+<li>A. Restricts the scan to one port</li>
+<li>B. Limits concurrent probes to one</li>
+<li>C. Selects one target host</li>
+<li>D. Runs only one NSE script</li>
+</ul>
+<p><strong>Answer: B. Limits concurrent probes to one.</strong> It reduces traffic pressure. A is
+controlled with <code>-p</code>. C is determined by the target argument. D is controlled by the
+<code>--script</code> selection.</p>
+<h3 id="question-5-ot-script-and-protocol">Question 5: OT script and protocol</h3>
+<p>Which command is the best match for identifying a Siemens SIMATIC S7 PLC?</p>
+<ul>
+<li>A. <code>nmap -Pn -sU -p 47808 --script bacnet-info TARGET</code></li>
+<li>B. <code>nmap -Pn -sT -p 102 --script=s7-info TARGET</code></li>
+<li>C. <code>nmap -Pn -sT -p 502 --script modbus-discover TARGET</code></li>
+<li>D. <code>nmap -Pn -sU -p 44818 --script enip-info TARGET</code></li>
+</ul>
+<p><strong>Answer: B.</strong> S7comm uses TCP 102 and the <code>s7-info</code> NSE script. A is BACnet/IP.
+C is Modbus/TCP. D is EtherNet/IP discovery.</p>
+<h3 id="question-6-firmware-analysis">Question 6: Firmware analysis</h3>
+<p>An assessor extracts a firmware image and finds a Squashfs filesystem. The next goal
+is to run one MIPS binary with its extracted libraries. Which tool fits BEST?</p>
+<ul>
+<li>A. QEMU</li>
+<li>B. Shodan</li>
+<li>C. Nessus</li>
+<li>D. CIRT.net</li>
+</ul>
+<p><strong>Answer: A. QEMU.</strong> It emulates the required processor environment. B searches
+internet exposure. C finds known vulnerabilities. D supplies default-password data.</p>
+<h3 id="question-7-hardware-interface">Question 7: Hardware interface</h3>
+<p>A BUS Auditor report lists device address 0x48, SCL pin 1, and SDA pin 0. Which
+interface was identified?</p>
+<ul>
+<li>A. UART</li>
+<li>B. I2C</li>
+<li>C. JTAG</li>
+<li>D. SPI</li>
+</ul>
+<p><strong>Answer: B. I2C.</strong> SCL and SDA are its clock and data lines. UART instead reports
+RX/TX and baud. JTAG is a debug/test interface. SPI uses a different signal arrangement.</p>
+<h3 id="question-8-rfcrack-flag">Question 8: RFCrack flag</h3>
+<p>Which RFCrack command selects jamming at the specified frequency?</p>
+<ul>
+<li>A. <code>python RFCrack.py -i</code></li>
+<li>B. <code>python RFCrack.py -r -M MOD_2FSK -F 314350000</code></li>
+<li>C. <code>python RFCrack.py -j -F 314000000</code></li>
+<li>D. <code>python RFCrack.py -U -100 -L -10</code></li>
+</ul>
+<p><strong>Answer: C.</strong> <code>-j</code> is jamming and <code>-F</code> sets frequency. A is live replay. B is
+rolling-code mode. D supplies RSSI bounds but no jamming selection.</p>
+<h3 id="question-9-purdue-placement">Question 9: Purdue placement</h3>
+<p>Which component is placed at Purdue Level 0?</p>
+<ul>
+<li>A. Business logistics database</li>
+<li>B. Site historian</li>
+<li>C. Area supervisory HMI</li>
+<li>D. Physical temperature sensor</li>
+</ul>
+<p><strong>Answer: D. Physical temperature sensor.</strong> Level 0 is the physical process. A is
+Level 4. B belongs to site operations at Level 3. C is representative of Level 2.</p>
+<h3 id="question-10-mitre-attck-for-ics">Question 10: MITRE ATT&amp;CK for ICS</h3>
+<p>Malware prevents an HMI from receiving alarm reports, while leaving the underlying
+process parameters unchanged. Which tactic fits BEST?</p>
+<ul>
+<li>A. Inhibit response function</li>
+<li>B. Initial access</li>
+<li>C. Collection</li>
+<li>D. Privilege escalation</li>
+</ul>
+<p><strong>Answer: A. Inhibit response function.</strong> Blocking reporting thwarts response to a
+hazard. B describes entry. C describes gathering data. D describes gaining greater
+privileges, not suppressing alarms.</p>
+<h3 id="question-11-evil-plc">Question 11: Evil PLC</h3>
+<p>A compromised PLC's logic is changed. Later, an engineering workstation connects and
+initiates an upload procedure that exposes it to the hostile PLC. What is this called?</p>
+<ul>
+<li>A. Evil PLC attack</li>
+<li>B. Sybil attack</li>
+<li>C. DNS rebinding</li>
+<li>D. NAND glitching</li>
+</ul>
+<p><strong>Answer: A. Evil PLC attack.</strong> The controller is weaponized against workstations.
+B uses many forged identities. C changes hostname resolution. D disturbs flash during
+boot to seek root access.</p>
+<h3 id="question-12-ai-assisted-assessment">Question 12: AI-assisted assessment</h3>
+<p>An analyst wants to use a public generative-AI service to help classify an authorized
+Malcolm protocol inventory. What is the BEST approach?</p>
+<ul>
+<li>A. Upload credentials and raw customer captures for maximum accuracy</li>
+<li>B. Ask it to generate live PLC write commands</li>
+<li>C. Provide minimized non-sensitive records and require evidence for each mapping</li>
+<li>D. Let it decide whether production fuzzing is safe</li>
+</ul>
+<p><strong>Answer: C.</strong> Minimization and evidence-based mappings reduce disclosure and
+hallucination risk. A exposes sensitive material. B can endanger a process. D delegates
+a safety decision that requires asset owners and operational evidence.</p>
+<h3 id="question-13-modbus-command-reading">Question 13: Modbus command reading</h3>
+<p>In <code>modbus read 192.168.30.104 %MW100 10</code>, what does the final <code>10</code> request?</p>
+<ul>
+<li>A. Ten consecutive register values</li>
+<li>B. A ten-bit register</li>
+<li>C. Unit identifier ten only</li>
+<li>D. Ten seconds of packet capture</li>
+</ul>
+<p><strong>Answer: A. Ten consecutive register values.</strong> The address selects the start and the
+count selects consecutive values. B confuses count with width. C is the slave/unit,
+not this argument. D is unrelated to this Modbus read syntax.</p>
+<h3 id="question-14-metasploit-module-selection">Question 14: Metasploit module selection</h3>
+<p>Which module should an authorized tester use first to discover active Modbus station
+identifiers?</p>
+<ul>
+<li>A. <code>auxiliary/scanner/scada/modbus_findunitid</code></li>
+<li>B. <code>auxiliary/scanner/scada/modbusclient</code></li>
+<li>C. <code>camover</code></li>
+<li>D. <code>fuzzowski</code></li>
+</ul>
+<p><strong>Answer: A.</strong> Its purpose is unit-ID discovery. B reads/manipulates data after a
+unit is selected. C targets camera password disclosure. D tests protocol handling
+with malformed/varied inputs.</p>
+<h3 id="question-15-hackrf-flags">Question 15: HackRF flags</h3>
+<p>What is the purpose of <code>hackrf_transfer -r capture.raw -f 433900000</code>?</p>
+<ul>
+<li>A. Transmit a file at 433.9 kHz</li>
+<li>B. Receive samples to a file at 433.9 MHz</li>
+<li>C. Display HackRF firmware information</li>
+<li>D. Jam all nearby 433 MHz devices</li>
+</ul>
+<p><strong>Answer: B.</strong> <code>-r</code> receives, and frequency is expressed in Hz. A reverses direction
+and misreads the units. C uses <code>hackrf_info</code>. D describes neither the receive flag
+nor a controlled replay capture.</p>
+<h3 id="question-16-default-credential-scenario">Question 16: Default-credential scenario</h3>
+<p>A building contractor can reach every camera's administration page from the internet,
+and all retain one factory password. What is the BEST combined response?</p>
+<ul>
+<li>A. Change only the web page title</li>
+<li>B. Enable UPnP so cameras can manage exposure</li>
+<li>C. Restrict management exposure and assign unique strong credentials</li>
+<li>D. Leave credentials because network scans found no CVE</li>
+</ul>
+<p><strong>Answer: C.</strong> It removes both exposure and shared-secret risk. A is cosmetic. B can
+increase unwanted exposure. D confuses lack of a scanner result with secure settings.</p>
+<h3 id="question-17-firmware-persistence">Question 17: Firmware persistence</h3>
+<p>A device remains compromised after its administrator password is changed. Analysis
+shows an unsigned modified firmware image. Which defense addresses the root cause BEST?</p>
+<ul>
+<li>A. Signed firmware with secure boot and trusted reflash</li>
+<li>B. A longer administrator password only</li>
+<li>C. Disable wireless SSID broadcast</li>
+<li>D. Increase log font size</li>
+</ul>
+<p><strong>Answer: A.</strong> It verifies the boot/update chain and removes the implanted image.
+B does not remove firmware persistence. C does not provide meaningful firmware
+integrity. D is unrelated.</p>
+<h3 id="question-18-fuzzing-tool">Question 18: Fuzzing tool</h3>
+<p>Which statement BEST distinguishes Fuzzowski from Nessus in this module?</p>
+<ul>
+<li>A. Fuzzowski tests malformed protocol inputs; Nessus maps known vulnerabilities</li>
+<li>B. Fuzzowski only searches Shodan; Nessus only emulates firmware</li>
+<li>C. Fuzzowski manages updates; Nessus pairs RF remotes</li>
+<li>D. They are identical packet-capture programs</li>
+</ul>
+<p><strong>Answer: A.</strong> Robustness fuzzing differs from known-vulnerability assessment. B
+describes neither tool correctly. C describes unrelated functions. D ignores their
+different assessment methods.</p>
+<h3 id="question-19-ot-malware-recognition">Question 19: OT malware recognition</h3>
+<p>An incident involves destructive ICS malware that modifies data, blocks sensor-gateway
+access, and attempts to damage sensors. Which family matches the notes?</p>
+<ul>
+<li>A. Fuxnet</li>
+<li>B. KmsdBot</li>
+<li>C. CamOver</li>
+<li>D. RFCrack</li>
+</ul>
+<p><strong>Answer: A. Fuxnet.</strong> Those are its described behaviors. B is IoT botnet malware.
+C and D are assessment tools, not the listed OT malware family.</p>
+<h3 id="question-20-segmentation-scenario">Question 20: Segmentation scenario</h3>
+<p>A compromised finance workstation can connect directly to PLCs because corporate IT
+and manufacturing share one flat network. Which design improvement is BEST?</p>
+<ul>
+<li>A. Move all PLCs onto the enterprise wireless network</li>
+<li>B. Establish an IDMZ and allow only required brokered flows</li>
+<li>C. Give every contractor the same OT administrator account</li>
+<li>D. Permit unrestricted outbound access for controller updates</li>
+</ul>
+<p><strong>Answer: B.</strong> Zones and an IDMZ limit direct trust and required pathways. A increases
+exposure. C violates least privilege and accountability. D increases malware/C2 risk.</p>
+<h3 id="question-21-ai-attack-angle">Question 21: AI attack angle</h3>
+<p>A vendor receives a highly fluent, personalized email and a realistic voice message
+asking for an emergency OT VPN exception. What is the BEST immediate action?</p>
+<ul>
+<li>A. Trust it because the grammar and voice are accurate</li>
+<li>B. Approve broad permanent access to save time</li>
+<li>C. Verify through a known independent channel and follow the access-approval process</li>
+<li>D. Upload internal network diagrams to a public chatbot for advice</li>
+</ul>
+<p><strong>Answer: C.</strong> AI phishing/deepfakes make content quality a weak trust signal; verified
+procedure is the control. A and B reward impersonation. D adds data exposure and does
+not authenticate the request.</p>
+<h3 id="question-22-supply-chain-recognition">Question 22: Supply-chain recognition</h3>
+<p>A maintenance contractor's account is stolen and its legitimate remote-support channel
+is used to reach the OT network. Which attack category fits BEST?</p>
+<ul>
+<li>A. Service-provider supply-chain compromise</li>
+<li>B. Optical fault injection</li>
+<li>C. Zigbee beacon replay only</li>
+<li>D. Username enumeration through a login form</li>
+</ul>
+<p><strong>Answer: A.</strong> A trusted service provider's access is the infiltration path. B is
+hardware glitching. C requires captured Zigbee frames. D concerns valid-account-name
+discovery, not abuse of a supplier relationship.</p>
+<h3 id="question-23-command-output-interpretation">Question 23: Command output interpretation</h3>
+<p>Metasploit prints <code>5 register values from address 0: [111, 22, 33, 0, 0]</code>. What can
+the tester conclude?</p>
+<ul>
+<li>A. Five Modbus values were read beginning at address zero</li>
+<li>B. Five cameras still use default passwords</li>
+<li>C. Five stations were proven absent</li>
+<li>D. The PLC was safely patched</li>
+</ul>
+<p><strong>Answer: A.</strong> The output explicitly reports the count, starting address, and values.
+B belongs to a camera scanner. C confuses data read with unit discovery. D does not
+follow from a successful read.</p>
+<h3 id="question-24-best-vulnerability-scanning-decision">Question 24: Best vulnerability-scanning decision</h3>
+<p>A Nessus demonstration policy scans ports 0-1000, but the analyst needs Modbus, S7,
+EtherNet/IP, and BACnet coverage. What is the BEST observation?</p>
+<ul>
+<li>A. The shown range omits several required OT ports and needs deliberate adjustment</li>
+<li>B. Port 502 proves all industrial services are covered</li>
+<li>C. Nessus cannot ever assess SCADA systems</li>
+<li>D. A completed scan with no SCADA plugins proves there are no SCADA flaws</li>
+</ul>
+<p><strong>Answer: A.</strong> Modbus 502 is included, but S7 102 is too while 44818 and 47808 are
+outside 0-1000; policy/plugins must match scope. B is overbroad. C is false because
+SCADA plugins are shown. D confuses missing coverage with absence of vulnerabilities.</p>
+<h2 id="10-flashcards">10. Flashcards</h2>
+<ul>
+<li>Q: What are the five IoT architecture layers? | A: Edge, access gateway, internet, middleware, application.</li>
+<li>Q: Which IoT layer translates protocols? | A: Access gateway layer.</li>
+<li>Q: Which IoT layer manages devices and information? | A: Middleware layer.</li>
+<li>Q: What does MQTT normally use? | A: Publish/subscribe messaging through a broker, normally TCP 1883.</li>
+<li>Q: What is the classic Modbus/TCP security weakness? | A: No built-in authentication or encryption.</li>
+<li>Q: What is the Modbus/TCP default port? | A: TCP 502.</li>
+<li>Q: What is the DNP3 default port? | A: TCP or UDP 20000.</li>
+<li>Q: Which port and script identify Siemens S7? | A: TCP 102 with Nmap <code>s7-info</code>.</li>
+<li>Q: Which port and script identify EtherNet/IP? | A: UDP or TCP 44818; notes use UDP with <code>enip-info</code>.</li>
+<li>Q: Which port and script identify BACnet? | A: UDP 47808 with <code>bacnet-info</code>.</li>
+<li>Q: Which ports identify Niagara Fox? | A: TCP 1911 and 4911 with <code>fox-info</code>.</li>
+<li>Q: What does Shodan provide? | A: Indexed internet-exposure data such as IP, port, and banner.</li>
+<li>Q: What does CIRT.net provide in this module? | A: A database of factory/default device passwords.</li>
+<li>Q: What is the rolling-code sequence? | A: Jam/capture first, jam/capture second, forward first, save second.</li>
+<li>Q: What does RFCrack <code>-r</code> select? | A: Rolling-code mode.</li>
+<li>Q: What does RFCrack <code>-j</code> select? | A: Jamming mode.</li>
+<li>Q: What do HackRF <code>-r</code> and <code>-t</code> mean? | A: Receive to a file and transmit from a file.</li>
+<li>Q: What is HackRF One's approximate range and duplex? | A: 1 MHz to 6 GHz, half duplex.</li>
+<li>Q: Which tool captures and replays 802.15.4 frames? | A: Open Sniffer; KillerBee is a close Zigbee alternative.</li>
+<li>Q: Which interface uses RX, TX, and baud rate? | A: UART.</li>
+<li>Q: Which interface uses SCL and SDA? | A: I2C.</li>
+<li>Q: Which interface is most associated with debugging execution? | A: JTAG.</li>
+<li>Q: What is NAND glitching? | A: Disturbing flash serial I/O during boot to seek privileged access.</li>
+<li>Q: What does CamOver <code>-a</code> specify? | A: One target camera address.</li>
+<li>Q: What does Firmware Mod Kit do? | A: Deconstructs and reconstructs firmware images.</li>
+<li>Q: What does Binwalk do? | A: Identifies and extracts embedded firmware data.</li>
+<li>Q: What does QEMU do in firmware assessment? | A: Emulates a binary or system architecture.</li>
+<li>Q: What is a PLC? | A: A controller executing local logic for a physical process.</li>
+<li>Q: What is an RTU? | A: A remote field telemetry/control unit.</li>
+<li>Q: What is the difference between SCADA and HMI? | A: SCADA supervises systems; HMI is the operator interface.</li>
+<li>Q: What is Purdue Level 0? | A: The physical process.</li>
+<li>Q: What is Purdue Level 3.5? | A: The industrial DMZ between IT and OT.</li>
+<li>Q: What is the safest initial discovery approach in fragile OT? | A: Passive traffic and asset-record review.</li>
+<li>Q: Which MITRE tactic blocks alarms or command reports? | A: Inhibit response function.</li>
+<li>Q: Which MITRE tactic alters parameters or I/O control? | A: Impair process control.</li>
+<li>Q: What is an Evil PLC attack? | A: A hostile PLC is used to attack connected engineering workstations.</li>
+<li>Q: What does Metasploit <code>modbus_findunitid</code> do? | A: Discovers responding Modbus unit identifiers.</li>
+<li>Q: What does <code>%MW100</code> represent in modbus-cli examples? | A: A 16-bit register/memory-word address.</li>
+<li>Q: What does <code>%M100</code> represent in modbus-cli examples? | A: A one-bit coil address.</li>
+<li>Q: What are the five zero-trust steps in the notes? | A: Define, map, architect, policy, monitor/maintain.</li>
+</ul>
+<h2 id="11-glossary">11. Glossary</h2>
+<ul>
+<li><strong>Access gateway:</strong> IoT layer that translates protocols and handles messaging.</li>
+<li><strong>Active scanning:</strong> Sending probes to a target to discover services or weaknesses.</li>
+<li><strong>Actuator:</strong> Device that changes a physical process, such as a valve or motor.</li>
+<li><strong>Asset register:</strong> Maintained inventory of systems, owners, versions, and criticality.</li>
+<li><strong>Backdoor:</strong> Unauthorized or hidden method of bypassing normal access controls.</li>
+<li><strong>BACnet:</strong> Building-automation protocol, commonly carried over UDP 47808.</li>
+<li><strong>Baud rate:</strong> Signaling speed configuration for a serial interface such as UART.</li>
+<li><strong>Binwalk:</strong> Tool that identifies and extracts embedded firmware content.</li>
+<li><strong>BSSID:</strong> Identifier of a wireless access-point radio.</li>
+<li><strong>Botnet:</strong> Collection of compromised devices controlled by an attacker.</li>
+<li><strong>C2:</strong> Command-and-control channel used to task compromised systems.</li>
+<li><strong>CoAP:</strong> REST-like application protocol for constrained IoT devices.</li>
+<li><strong>Coil:</strong> One-bit Modbus value that can represent a controllable switch state.</li>
+<li><strong>Conduit:</strong> Controlled communication path between OT security zones.</li>
+<li><strong>DCS:</strong> Distributed control system used to coordinate plant processes.</li>
+<li><strong>Deepfake:</strong> AI-generated or altered media that imitates a real person or event.</li>
+<li><strong>DMZ:</strong> Buffer network separating zones with different trust levels.</li>
+<li><strong>DNP3:</strong> Industrial protocol commonly used by utility SCADA systems.</li>
+<li><strong>DNS rebinding:</strong> Changing DNS answers to make browser script reach another address.</li>
+<li><strong>Edge layer:</strong> IoT devices, sensors, machines, and intelligent edge nodes.</li>
+<li><strong>EMFI:</strong> Electromagnetic fault injection used to disturb chip behavior.</li>
+<li><strong>EtherNet/IP:</strong> Industrial protocol carrying CIP over standard IP networks.</li>
+<li><strong>Evil PLC:</strong> Weaponized controller used to attack engineering workstations.</li>
+<li><strong>Fault injection:</strong> Deliberate disturbance of operating conditions to alter execution.</li>
+<li><strong>Firmware:</strong> Low-level software that controls a hardware device.</li>
+<li><strong>FOTA:</strong> Firmware-over-the-air update mechanism.</li>
+<li><strong>Fuzzing:</strong> Sending varied or malformed inputs to discover handling failures.</li>
+<li><strong>Gateway:</strong> System that connects networks and may translate protocols.</li>
+<li><strong>Half duplex:</strong> Ability to transmit or receive, but not both simultaneously.</li>
+<li><strong>HMI:</strong> Human-machine interface for monitoring and operator commands.</li>
+<li><strong>HVAC:</strong> Heating, ventilation, and air-conditioning systems.</li>
+<li><strong>I2C:</strong> Addressed hardware bus using SCL and SDA.</li>
+<li><strong>ICS:</strong> Industrial control system and its associated equipment and networks.</li>
+<li><strong>IDMZ:</strong> Industrial demilitarized zone between enterprise and manufacturing zones.</li>
+<li><strong>IIoT:</strong> Internet of Things applied to industrial operations.</li>
+<li><strong>JTAG:</strong> Hardware test/debug interface that can expose memory and execution.</li>
+<li><strong>Jamming:</strong> Radio interference that prevents reliable communication.</li>
+<li><strong>Malcolm:</strong> Network security monitoring platform with ICS protocol visibility.</li>
+<li><strong>Middleware:</strong> IoT layer providing device and information management.</li>
+<li><strong>MITM:</strong> Man-in-the-middle interception between two communicating parties.</li>
+<li><strong>Modbus:</strong> Simple industrial protocol for registers, coils, and device control.</li>
+<li><strong>Monitor mode:</strong> Wireless adapter mode for capturing radio frames.</li>
+<li><strong>MQTT:</strong> Lightweight publish/subscribe messaging protocol using a broker.</li>
+<li><strong>Nessus:</strong> Vulnerability-assessment product with SCADA-related plugins.</li>
+<li><strong>NSE:</strong> Nmap Scripting Engine used for service-specific discovery scripts.</li>
+<li><strong>OT:</strong> Operational technology that monitors or controls industrial physical devices.</li>
+<li><strong>Passive discovery:</strong> Learning assets from existing records or observed traffic.</li>
+<li><strong>Purdue model:</strong> Layered architecture separating enterprise, operations, and process.</li>
+<li><strong>PLC:</strong> Programmable logic controller executing deterministic control logic.</li>
+<li><strong>Power analysis:</strong> Side channel that infers secrets from electrical consumption.</li>
+<li><strong>Purdue IDMZ:</strong> Level 3.5 boundary used to broker IT/OT communication.</li>
+<li><strong>QEMU:</strong> Emulator used to run firmware binaries for another processor architecture.</li>
+<li><strong>Ransomware:</strong> Malware that denies data or device access and demands payment.</li>
+<li><strong>Register:</strong> Multi-bit Modbus storage value, commonly 16 bits.</li>
+<li><strong>Replay:</strong> Retransmission of previously captured valid communication.</li>
+<li><strong>RF:</strong> Radio frequency communication.</li>
+<li><strong>Rolling code:</strong> Changing authentication code sequence used by key fobs.</li>
+<li><strong>Root of trust:</strong> Trusted hardware/software anchor for verifying system integrity.</li>
+<li><strong>Rootkit:</strong> Malware that hides itself and maintains privileged control.</li>
+<li><strong>RSSI:</strong> Received signal strength indicator.</li>
+<li><strong>RTU:</strong> Remote terminal unit connecting distant field equipment to supervision.</li>
+<li><strong>SCADA:</strong> Supervisory control and data acquisition across industrial processes.</li>
+<li><strong>SDR:</strong> Software-defined radio with programmable signal processing.</li>
+<li><strong>Secure boot:</strong> Startup chain that verifies trusted software before execution.</li>
+<li><strong>Segmentation:</strong> Dividing a network into controlled security zones.</li>
+<li><strong>Sensor:</strong> Device that measures a physical property.</li>
+<li><strong>Shodan:</strong> Search engine indexing internet-facing device and service information.</li>
+<li><strong>Side channel:</strong> Information leakage through timing, power, emissions, or behavior.</li>
+<li><strong>SIS:</strong> Safety instrumented system designed to bring a process to a safe state.</li>
+<li><strong>SPI:</strong> Synchronous serial interface for chips and peripherals.</li>
+<li><strong>Squashfs:</strong> Compressed read-only filesystem often found in embedded firmware.</li>
+<li><strong>Sybil attack:</strong> Use of many forged identities to manipulate a network.</li>
+<li><strong>Telnet:</strong> Plaintext remote-terminal protocol using TCP 23.</li>
+<li><strong>Timing analysis:</strong> Side channel that infers secrets from operation duration.</li>
+<li><strong>TLS:</strong> Transport Layer Security used to protect application communication.</li>
+<li><strong>UART:</strong> Asynchronous serial hardware interface using receive/transmit lines.</li>
+<li><strong>UPnP:</strong> Automatic discovery/configuration technology often disabled on routers.</li>
+<li><strong>VPN:</strong> Protected network tunnel used for managed remote access.</li>
+<li><strong>Zero trust:</strong> Security model that continuously verifies and minimizes access.</li>
+<li><strong>Zigbee:</strong> Low-power IEEE 802.15.4 mesh networking technology.</li>
+</ul>
+<h2 id="12-coverage-report">12. Coverage Report</h2>
+<h3 id="121-page-to-section-map">12.1 Page-to-section map</h3>
+<table>
+<thead>
+<tr>
+<th>Page</th>
+<th>Source topics</th>
+<th>Guide sections</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Objectives, IoT definition, data flow</td>
+<td>1, 3.1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>IoT layers, technologies</td>
+<td>3.2</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Protocol repeat, OWASP Top 10</td>
+<td>3.2, 3.3</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Attack surfaces, vulnerabilities</td>
+<td>3.3</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Threat list, DDoS</td>
+<td>3.4</td>
+</tr>
+<tr>
+<td>6</td>
+<td>HVAC, rolling code</td>
+<td>3.4, 3.5</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Jamming, smart-grid backdoor</td>
+<td>3.5, 3.6</td>
+</tr>
+<tr>
+<td>8</td>
+<td>SDR replay/cryptanalysis/recon</td>
+<td>3.7</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Local discovery, rebinding, faults</td>
+<td>3.7, 3.8</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Other attacks, IoT malware</td>
+<td>3.8, 3.9</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Shodan, wireless sniffing</td>
+<td>3.10, 5.1-5.2</td>
+</tr>
+<tr>
+<td>12</td>
+<td>IoTSeeker, Genzai</td>
+<td>3.11, 5.3</td>
+</tr>
+<tr>
+<td>13</td>
+<td>RFCrack, Open Sniffer</td>
+<td>3.12, 5.4</td>
+</tr>
+<tr>
+<td>14</td>
+<td>HackRF One and replay</td>
+<td>3.12-3.13, 5.5</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Buses, NAND glitching</td>
+<td>3.13-3.14, 5.6</td>
+</tr>
+<tr>
+<td>16</td>
+<td>CamOver, Telnet</td>
+<td>3.14, 5.7</td>
+</tr>
+<tr>
+<td>17</td>
+<td>Firmware access and analysis</td>
+<td>3.15-3.16, 5.8-5.9</td>
+</tr>
+<tr>
+<td>18</td>
+<td>IoT tools, defenses</td>
+<td>3.17-3.18</td>
+</tr>
+<tr>
+<td>19</td>
+<td>Manufacturer/OWASP solutions</td>
+<td>3.18</td>
+</tr>
+<tr>
+<td>20</td>
+<td>Hardware and device management</td>
+<td>3.17-3.18</td>
+</tr>
+<tr>
+<td>21</td>
+<td>OT, ICS, convergence</td>
+<td>3.19</td>
+</tr>
+<tr>
+<td>22</td>
+<td>Purdue and OT protocols</td>
+<td>3.20, 6.2</td>
+</tr>
+<tr>
+<td>23</td>
+<td>OT challenges/vulnerabilities</td>
+<td>3.21</td>
+</tr>
+<tr>
+<td>24</td>
+<td>MITRE ATT&amp;CK for ICS</td>
+<td>3.22</td>
+</tr>
+<tr>
+<td>25</td>
+<td>OT threats, HMI</td>
+<td>3.23</td>
+</tr>
+<tr>
+<td>26</td>
+<td>HMI example, side channels</td>
+<td>3.23</td>
+</tr>
+<tr>
+<td>27</td>
+<td>PLC rootkit, Evil PLC</td>
+<td>3.24</td>
+</tr>
+<tr>
+<td>28</td>
+<td>RF remote controllers</td>
+<td>3.24</td>
+</tr>
+<tr>
+<td>29</td>
+<td>Supply chain, OT malware</td>
+<td>3.24-3.25, 5.14</td>
+</tr>
+<tr>
+<td>30</td>
+<td>Shodan OT, CIRT.net</td>
+<td>3.26</td>
+</tr>
+<tr>
+<td>31</td>
+<td>Nmap OT, Modbus Wireshark</td>
+<td>3.27, 5.10</td>
+</tr>
+<tr>
+<td>32</td>
+<td>Malcolm, Nessus</td>
+<td>3.27-3.28</td>
+</tr>
+<tr>
+<td>33</td>
+<td>Fuzzowski, Skybox</td>
+<td>3.28, 5.11</td>
+</tr>
+<tr>
+<td>34</td>
+<td>Hardware, Metasploit</td>
+<td>3.29, 5.12</td>
+</tr>
+<tr>
+<td>35</td>
+<td>modbus-cli types/read/write</td>
+<td>3.29, 5.13</td>
+</tr>
+<tr>
+<td>36</td>
+<td>Modbus output, DNP3</td>
+<td>3.29, 5.13</td>
+</tr>
+<tr>
+<td>37</td>
+<td>OT defense and solutions</td>
+<td>3.30</td>
+</tr>
+<tr>
+<td>38</td>
+<td>Purdue controls, zero trust</td>
+<td>3.30</td>
+</tr>
+<tr>
+<td>39</td>
+<td>Organizations, module summary</td>
+<td>3.30, 1</td>
+</tr>
+</tbody>
+</table>
+<h3 id="122-unclear-items-and-best-readings">12.2 Unclear items and best readings</h3>
+<ul>
+<li>[UNCLEAR on page 11] OCR shows <code>nmap -P</code> and <code>airodump-ng start wlan0mon</code>.
+  The guide uses standard <code>-p</code> and <code>airodump-ng wlan0mon</code>, labelled as corrections.</li>
+<li>[UNCLEAR on page 12] The small Genzai screenshot's CVE identifier is not reliable;
+  the guide keeps the confirmed TP-Link/default-password concept and omits the number.</li>
+<li>[UNCLEAR on page 14] HackRF raw capture filenames are blurry. <code>capture.raw</code> is a
+  clearly labelled teaching substitute; flags and frequency follow the notes.</li>
+<li>[UNCLEAR on page 22] HSCP appears in the Purdue protocol list, but its expansion
+  cannot be confirmed from the supplied text. It is retained without an invented port.</li>
+<li>[UNCLEAR on page 29] Parts of Fuxnet JSON UUID values are illegible. The guide
+  covers the legible structure and behavior without reconstructing identifiers.</li>
+<li>[UNCLEAR on page 31] The Omron example shows TCP while FINS commonly uses UDP 9600.
+  Both the slide syntax and the transport conflict are explicitly identified.</li>
+</ul>
+<h3 id="123-items-to-double-check">12.3 Items to double check</h3>
+<ul>
+<li>Tool versions change. Fuzzowski's installed build may not include every protocol
+  fuzzer or monitor shown in the course; upstream documentation notes partial support.</li>
+<li>RFCrack RSSI <code>-U/-L</code> behavior is tool-specific. Memorize the notes' example rather
+  than generalizing the numeric ordering to other RF tools.</li>
+<li>Port numbers identify common defaults, not proof of service or device identity.</li>
+<li>Shodan coordinates and country/city results can be inaccurate; verify ownership
+  before any active test.</li>
+<li>The supplied attachment is a page-text transcription, not the original images.
+  Blurry small-text items above are not guessed silently.</li>
+</ul>
+<h3 id="124-coverage-confirmation">12.4 Coverage confirmation</h3>
+<p>All 39 inventory lines are mapped above. Every named tool, attack, protocol, command,
+flag, defense, standard, organization, and legible diagram sequence is covered in
+exactly one primary topic section and cross-referenced in the reference sections.
+Repeated screenshots are merged without dropping unique details. No real exam dumps
+are used; all 24 practice questions are original.</p></main></body></html>
